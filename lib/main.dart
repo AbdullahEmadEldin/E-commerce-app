@@ -17,14 +17,18 @@ class EcommerceApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xffF9F9F9),
           primarySwatch: Colors.red,
           inputDecorationTheme: InputDecorationTheme(
-              fillColor: Color(0xffFFFFFF),
-              labelStyle: Theme.of(context).textTheme.titleMedium,
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(3.0),
-                  borderSide: const BorderSide(color: Colors.grey)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(3.0),
-                  borderSide: const BorderSide(color: Colors.grey)))),
+            fillColor: Color(0xffFFFFFF),
+            labelStyle: Theme.of(context).textTheme.titleMedium,
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(3.0),
+                borderSide: const BorderSide(color: Colors.grey)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(3.0),
+                borderSide: const BorderSide(color: Colors.grey)),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(3.0),
+                borderSide: const BorderSide(color: Colors.red)),
+          )),
       onGenerateRoute: routeGenerator,
       initialRoute: AppRoutes.authenticationPage,
     );

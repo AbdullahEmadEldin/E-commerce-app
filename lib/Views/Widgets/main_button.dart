@@ -11,7 +11,7 @@ class MainButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 50,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
       child: ElevatedButton(
         onPressed: ontap,
         child: Text(text),
