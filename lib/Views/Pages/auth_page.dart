@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,6 @@ class _AuthPageState extends State<AuthPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   var _authType = AuthFormType.login;
-  final _emialFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   @override
   //dispose method release the memory resources used by objects or controllers
@@ -52,6 +52,7 @@ class _AuthPageState extends State<AuthPage> {
                 const SizedBox(height: 80),
                 TextFormField(
                   controller: _emailController,
+                  //this function make the done button on soft keyboard go to the textFeild of _passwordFocusNode
                   onEditingComplete: () =>
                       FocusScope.of(context).requestFocus(_passwordFocusNode),
                   validator: (value) =>
@@ -86,7 +87,7 @@ class _AuthPageState extends State<AuthPage> {
                         _authType == AuthFormType.login ? 'LOGIN' : 'REGISTER',
                     ontap: () {
                       if (_formKey.currentState!.validate())
-                        debugPrint('Authenticated');
+                        Navigator.pushNamed(context, AppRoutes.bottomBar);
                     }),
                 SizedBox(height: 8.0),
                 Align(
