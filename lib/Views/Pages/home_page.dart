@@ -1,4 +1,6 @@
+import 'package:e_commerce_app/Models/product.dart';
 import 'package:e_commerce_app/Utilities/assets.dart';
+import 'package:e_commerce_app/Views/Widgets/productlist_home.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -7,7 +9,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Column(
+    return ListView(
       children: [
         Stack(
           alignment: Alignment.bottomLeft,
@@ -45,6 +47,34 @@ class HomePage extends StatelessWidget {
             children: [
               _buildHeaderOfList(context,
                   title: 'Sale', description: 'Super Summer Sale!'),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 300,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: dummyProducts
+                      .map((e) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ProductTileHome(product: e),
+                          ))
+                      .toList(),
+                ),
+              ),
+              _buildHeaderOfList(context,
+                  title: 'New', description: 'Super New Products!'),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 300,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: dummyProducts
+                      .map((e) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ProductTileHome(product: e),
+                          ))
+                      .toList(),
+                ),
+              )
             ],
           ),
         ),
