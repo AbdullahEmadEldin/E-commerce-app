@@ -26,7 +26,7 @@ List<Product> dummyProducts = [
       price: 300,
       category: 'Men',
       imgUrl: AppAssets.tempProduct1,
-      discout: -20),
+      discout: 20),
   Product(
       id: '1',
       title: 'T-shirt',
@@ -39,7 +39,7 @@ List<Product> dummyProducts = [
       price: 300,
       category: 'Men',
       imgUrl: AppAssets.tempProduct1,
-      discout: -30),
+      discout: 30),
   Product(
       id: '1',
       title: 'T-shirt',

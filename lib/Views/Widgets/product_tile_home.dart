@@ -37,19 +37,26 @@ class ProductTileHome extends StatelessWidget {
           const SizedBox(height: 4.0),
           Text(
             '${product.title}',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.w600),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
           ),
           const SizedBox(height: 4.0),
-          Text(
-            '${product.price}\$',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(color: const Color.fromARGB(255, 110, 110, 110)),
-          )
+          Text.rich(TextSpan(children: [
+            TextSpan(
+              text: '${product.price}\$',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: const Color.fromARGB(255, 110, 110, 110),
+                  decoration: product.discout != null
+                      ? TextDecoration.lineThrough
+                      : null),
+            ),
+            product.discout != null
+                ? TextSpan(
+                    text: '  ${product.price * (product.discout ?? 0) / 100}\$',
+                    style: const TextStyle(color: Colors.red))
+                : const TextSpan(),
+          ]))
         ],
       ),
     );
@@ -65,7 +72,7 @@ class ProductTileHome extends StatelessWidget {
             color: Colors.red, borderRadius: BorderRadius.circular(20)),
         child: Center(
             child: Text(
-          "${product.discout}%",
+          "-${product.discout}%",
           style: TextStyle(color: Colors.white),
         )),
       ),

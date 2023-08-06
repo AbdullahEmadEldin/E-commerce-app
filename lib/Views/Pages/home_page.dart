@@ -1,6 +1,6 @@
 import 'package:e_commerce_app/Models/product.dart';
 import 'package:e_commerce_app/Utilities/assets.dart';
-import 'package:e_commerce_app/Views/Widgets/productlist_home.dart';
+import 'package:e_commerce_app/Views/Widgets/product_tile_home.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
