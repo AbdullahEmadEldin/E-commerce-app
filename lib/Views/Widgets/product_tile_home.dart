@@ -53,7 +53,8 @@ class ProductTileHome extends StatelessWidget {
             ),
             product.discout != null
                 ? TextSpan(
-                    text: '  ${product.price * (product.discout ?? 0) / 100}\$',
+                    text:
+                        '  ${product.price - (product.price * (product.discout ?? 0)) / 100}\$',
                     style: const TextStyle(color: Colors.red))
                 : const TextSpan(),
           ]))

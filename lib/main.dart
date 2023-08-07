@@ -1,8 +1,12 @@
-import 'package:e_commerce_app/Utilities/router.dart';
-import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:e_commerce_app/Utilities/routes.dart';
+import 'package:e_commerce_app/Utilities/router.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const EcommerceApp());
 }
 
