@@ -1,10 +1,13 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import 'package:e_commerce_app/Utilities/routes.dart';
+import 'package:e_commerce_app/Controllers/auth_controller.dart';
+import 'package:e_commerce_app/Services/auth.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../Utilities/enums.dart';
+import '../../Utilities/routes.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -17,7 +20,6 @@ class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  var _authType = AuthFormType.login;
   final _passwordFocusNode = FocusNode();
   @override
   //dispose method release the memory resources used by objects or controllers
@@ -31,116 +33,151 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final auth = Provider.of<AuthBase>(context);
 
-    return Scaffold(
-      body: SafeArea(
-          child: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 40,
-            horizontal: 30,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _authType == AuthFormType.login ? 'Login' : 'Register',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 80),
-                TextFormField(
-                  controller: _emailController,
-                  //this function make the done button on soft keyboard go to the textFeild of _passwordFocusNode
-                  onEditingComplete: () =>
-                      FocusScope.of(context).requestFocus(_passwordFocusNode),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your email' : null,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Enter your email',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  focusNode: _passwordFocusNode,
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your password' : null,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter your password',
-                  ),
-                ),
-                const SizedBox(height: 8.0),
-                if (_authType == AuthFormType.login)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                        onTap: () {},
-                        child: const Text('Forgot your password? ')),
-                  ),
-                const SizedBox(height: 16),
-                MainButton(
-                    text:
-                        _authType == AuthFormType.login ? 'LOGIN' : 'REGISTER',
-                    ontap: () {
-                      if (_formKey.currentState!.validate())
-                        Navigator.pushNamed(context, AppRoutes.bottomBar);
-                    }),
-                SizedBox(height: 8.0),
-                Align(
-                    alignment: Alignment.center,
-                    child: InkWell(
-                      onTap: () {
-                        _formKey.currentState!.reset();
-                        setState(() {
-                          if (_authType == AuthFormType.login)
-                            _authType = AuthFormType.register;
-                          else
-                            _authType = AuthFormType.login;
-                        });
-                      },
-                      child: _authType == AuthFormType.login
-                          ? const Text('Don\'t have an account? Register ')
-                          : const Text('Already have an account? Login'),
-                    )),
-                SizedBox(height: size.height * 0.14),
-                Center(
-                    child: _authType == AuthFormType.login
-                        ? const Text('Or Login with')
-                        : const Text('Or Sign up with')),
-                const SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return ChangeNotifierProvider<AuthController>(
+      create: (_) => AuthController(auth: auth),
+      child: Consumer<AuthController>(builder: (context, authModel, child) {
+        return Scaffold(
+          body: SafeArea(
+              child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 40,
+                horizontal: 30,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.0),
-                        color: Colors.white,
-                      ),
-                      child: Icon(Icons.add),
+                    Text(
+                      authModel.authFormType == AuthFormType.login
+                          ? 'Login'
+                          : 'Register',
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    const SizedBox(width: 16.0),
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.0),
-                        color: Colors.white,
+                    const SizedBox(height: 80),
+                    TextFormField(
+                      controller: _emailController,
+                      //this function make the done button on soft keyboard go to the textFeild of _passwordFocusNode
+                      onEditingComplete: () => FocusScope.of(context)
+                          .requestFocus(_passwordFocusNode),
+                      validator: (value) =>
+                          value!.isEmpty ? 'Please enter your email' : null,
+                      onChanged: authModel.updateEmail,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'Enter your email',
                       ),
-                      child: Icon(Icons.add),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      obscureText: true,
+                      controller: _passwordController,
+                      focusNode: _passwordFocusNode,
+                      validator: (value) =>
+                          value!.isEmpty ? 'Please enter your password' : null,
+                      onChanged: authModel.updatePassword,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'Enter your password',
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    if (authModel.authFormType == AuthFormType.login)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                            onTap: () {},
+                            child: const Text('Forgot your password? ')),
+                      ),
+                    const SizedBox(height: 16),
+                    MainButton(
+                        text: authModel.authFormType == AuthFormType.login
+                            ? 'LOGIN'
+                            : 'REGISTER',
+                        ontap: () {
+                          //this if state check the validator condtion
+                          if (_formKey.currentState!.validate()) {
+                            _submit(authModel);
+                            //
+                          }
+                        }),
+                    const SizedBox(height: 8.0),
+                    Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            _formKey.currentState!.reset();
+                            authModel.toggleFormType();
+                          },
+                          child: authModel.authFormType == AuthFormType.login
+                              ? const Text('Don\'t have an account? Register ')
+                              : const Text('Already have an account? Login'),
+                        )),
+                    SizedBox(height: size.height * 0.14),
+                    Center(
+                        child: authModel.authFormType == AuthFormType.login
+                            ? const Text('Or Login with')
+                            : const Text('Or Sign up with')),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.white,
+                          ),
+                          child: Icon(Icons.add),
+                        ),
+                        const SizedBox(width: 16.0),
+                        Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.white,
+                          ),
+                          child: Icon(Icons.add),
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
-          ),
-        ),
-      )),
+          )),
+        );
+      }),
     );
+  }
+
+  Future<void> _submit(AuthController auth) async {
+    try {
+      await auth.submit();
+      if (!mounted)
+        return; //to remove warnning of don't use context in a sync gaps
+      Navigator.pushNamed(context, AppRoutes.bottomBar);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: Text(
+                  'Erroe!',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                content: Text(e.toString(),
+                    style: Theme.of(context).textTheme.titleMedium),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text('Ok'))
+                ],
+              ));
+    }
   }
 }
