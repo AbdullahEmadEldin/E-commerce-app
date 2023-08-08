@@ -1,11 +1,9 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
-
-import 'package:e_commerce_app/Controllers/auth_controller.dart';
-import 'package:e_commerce_app/Services/auth.dart';
-import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:e_commerce_app/Controllers/auth_controller.dart';
+import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import '../../Utilities/enums.dart';
 import '../../Utilities/routes.dart';
 
