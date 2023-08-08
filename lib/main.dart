@@ -39,7 +39,7 @@ class EcommerceApp extends StatelessWidget {
                   borderSide: const BorderSide(color: Colors.red)),
             )),
         onGenerateRoute: routeGenerator,
-        initialRoute: AppRoutes.authenticationPage,
+        initialRoute: AppRoutes.landingPageRoute,
       ),
     );
   }

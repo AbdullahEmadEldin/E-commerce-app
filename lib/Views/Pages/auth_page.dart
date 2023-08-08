@@ -21,6 +21,7 @@ class _AuthPageState extends State<AuthPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordFocusNode = FocusNode();
+
   @override
   //dispose method release the memory resources used by objects or controllers
   //when they no lnoger needed
@@ -33,127 +34,124 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final auth = Provider.of<AuthBase>(context);
 
-    return ChangeNotifierProvider<AuthController>(
-      create: (_) => AuthController(auth: auth),
-      child: Consumer<AuthController>(builder: (context, authModel, child) {
-        return Scaffold(
-          body: SafeArea(
-              child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 40,
-                horizontal: 30,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      authModel.authFormType == AuthFormType.login
-                          ? 'Login'
-                          : 'Register',
-                      style: Theme.of(context).textTheme.headlineMedium,
+    return Consumer<AuthController>(builder: (context, authModel, child) {
+      return Scaffold(
+        body: SafeArea(
+            child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 40,
+              horizontal: 30,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    authModel.authFormType == AuthFormType.login
+                        ? 'Login'
+                        : 'Register',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 80),
+                  TextFormField(
+                    controller: _emailController,
+                    //this function make the done button on soft keyboard go to the textFeild of _passwordFocusNode
+                    onEditingComplete: () =>
+                        FocusScope.of(context).requestFocus(_passwordFocusNode),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter your email' : null,
+                    onChanged: authModel.updateEmail,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      hintText: 'Enter your email',
                     ),
-                    const SizedBox(height: 80),
-                    TextFormField(
-                      controller: _emailController,
-                      //this function make the done button on soft keyboard go to the textFeild of _passwordFocusNode
-                      onEditingComplete: () => FocusScope.of(context)
-                          .requestFocus(_passwordFocusNode),
-                      validator: (value) =>
-                          value!.isEmpty ? 'Please enter your email' : null,
-                      onChanged: authModel.updateEmail,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
-                      ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    obscureText: true,
+                    controller: _passwordController,
+                    focusNode: _passwordFocusNode,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter your password' : null,
+                    onChanged: authModel.updatePassword,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      hintText: 'Enter your password',
                     ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      obscureText: true,
-                      controller: _passwordController,
-                      focusNode: _passwordFocusNode,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Please enter your password' : null,
-                      onChanged: authModel.updatePassword,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    if (authModel.authFormType == AuthFormType.login)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                            onTap: () {},
-                            child: const Text('Forgot your password? ')),
-                      ),
-                    const SizedBox(height: 16),
-                    MainButton(
-                        text: authModel.authFormType == AuthFormType.login
-                            ? 'LOGIN'
-                            : 'REGISTER',
-                        ontap: () {
-                          //this if state check the validator condtion
-                          if (_formKey.currentState!.validate()) {
-                            _submit(authModel);
-                            //
-                          }
-                        }),
-                    const SizedBox(height: 8.0),
+                  ),
+                  const SizedBox(height: 8.0),
+                  if (authModel.authFormType == AuthFormType.login)
                     Align(
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
-                            _formKey.currentState!.reset();
-                            authModel.toggleFormType();
-                          },
-                          child: authModel.authFormType == AuthFormType.login
-                              ? const Text('Don\'t have an account? Register ')
-                              : const Text('Already have an account? Login'),
-                        )),
-                    SizedBox(height: size.height * 0.14),
-                    Center(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                          onTap: () {},
+                          child: const Text('Forgot your password? ')),
+                    ),
+                  const SizedBox(height: 16),
+                  MainButton(
+                      text: authModel.authFormType == AuthFormType.login
+                          ? 'LOGIN'
+                          : 'REGISTER',
+                      ontap: () {
+                        //this if state check the validator condtion
+                        if (_formKey.currentState!.validate()) {
+                          _submit(authModel);
+                          //
+                        }
+                      }),
+                  const SizedBox(height: 8.0),
+                  Align(
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          //TODO: the currentState method doesn't work and i don't know the reason
+                          _formKey.currentState!.reset();
+                          authModel.toggleFormType();
+                        },
                         child: authModel.authFormType == AuthFormType.login
-                            ? const Text('Or Login with')
-                            : const Text('Or Sign up with')),
-                    const SizedBox(height: 16.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: Colors.white,
-                          ),
-                          child: Icon(Icons.add),
+                            ? const Text('Don\'t have an account? Register ')
+                            : const Text('Already have an account? Login'),
+                      )),
+                  SizedBox(height: size.height * 0.14),
+                  Center(
+                      child: authModel.authFormType == AuthFormType.login
+                          ? const Text('Or Login with')
+                          : const Text('Or Sign up with')),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.0),
+                          color: Colors.white,
                         ),
-                        const SizedBox(width: 16.0),
-                        Container(
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: Colors.white,
-                          ),
-                          child: Icon(Icons.add),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                        child: Icon(Icons.add),
+                      ),
+                      const SizedBox(width: 16.0),
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.0),
+                          color: Colors.white,
+                        ),
+                        child: Icon(Icons.add),
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
-          )),
-        );
-      }),
-    );
+          ),
+        )),
+      );
+    });
   }
 
   Future<void> _submit(AuthController auth) async {
