@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return ListView(
       children: [
         Stack(
-          alignment: Alignment.bottomLeft,
           children: [
             Image.network(
               AppAssets.homePageBanner,
@@ -28,15 +26,16 @@ class HomePage extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-              child: Text(
-                'Street Clothes',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
+                child: Text(
+                  'Street Clothes',
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             ),
           ],

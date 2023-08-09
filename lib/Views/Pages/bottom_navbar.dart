@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/Views/Pages/home_page.dart';
+import 'package:e_commerce_app/Views/Pages/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
@@ -16,7 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   ///the buildScreens list and navBarItems list must have the same num of items
   ///and in the desired order because they are linked together
   List<Widget> _buildScreens() {
-    return [HomePage(), Container(), Container(), Container(), Container()];
+    return [HomePage(), Container(), Container(), Container(), ProfilePage()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

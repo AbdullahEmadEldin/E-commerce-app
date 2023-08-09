@@ -46,4 +46,12 @@ class AuthController with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> logOut() async {
+    try {
+      await auth.logOut();
+    } catch (e) {
+      debugPrint('logout error: $e');
+    }
+  }
 }

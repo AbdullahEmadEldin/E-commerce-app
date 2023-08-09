@@ -21,6 +21,7 @@ class EcommerceApp extends StatelessWidget {
     return Provider<AuthBase>(
       create: (_) => Auth(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Ecommerce App',
         theme: ThemeData(
             scaffoldBackgroundColor: const Color(0xffF9F9F9),

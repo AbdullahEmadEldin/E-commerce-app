@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:e_commerce_app/Controllers/auth_controller.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import '../../Utilities/enums.dart';
-import '../../Utilities/routes.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   //dispose method release the memory resources used by objects or controllers
-  //when they no lnoger needed
+  //when they no lnoger needed to avoid memory leak
   void dispose() {
     super.dispose();
     _emailController.dispose();
@@ -93,11 +92,10 @@ class _AuthPageState extends State<AuthPage> {
                       text: authModel.authFormType == AuthFormType.login
                           ? 'LOGIN'
                           : 'REGISTER',
-                      ontap: () {
-                        //this if state check the validator condtion
+                      ontap: () async {
+                        //this if state check the validator condtion of textfields
                         if (_formKey.currentState!.validate()) {
                           _submit(authModel);
-                          //
                         }
                       }),
                   const SizedBox(height: 8.0),
@@ -152,18 +150,21 @@ class _AuthPageState extends State<AuthPage> {
     });
   }
 
+  /// Helper functions
   Future<void> _submit(AuthController auth) async {
     try {
+      //TODO: authentication tip:
+      //when you submit it goes directly to the bottomNavBar without Navigation hooooooow?
+      //because the landinPage mediator and have StramBuilder
+      // StreamBuilder is a widget that builds itself based on the latest snapshot of interaction with a stream
+      //So, when you submit the snapshot.data is updated with the correct user ans password and then logIn...
       await auth.submit();
-      if (!mounted)
-        return; //to remove warnning of don't use context in a sync gaps
-      Navigator.pushNamed(context, AppRoutes.bottomBar);
     } catch (e) {
       showDialog(
           context: context,
           builder: (_) => AlertDialog(
                 title: Text(
-                  'Erroe!',
+                  'Error!',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 content: Text(e.toString(),
