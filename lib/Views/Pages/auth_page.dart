@@ -15,18 +15,12 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+
   final _passwordFocusNode = FocusNode();
 
   @override
   //dispose method release the memory resources used by objects or controllers
   //when they no lnoger needed to avoid memory leak
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +48,6 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   const SizedBox(height: 80),
                   TextFormField(
-                    controller: _emailController,
                     //this function make the done button on soft keyboard go to the textFeild of _passwordFocusNode
                     onEditingComplete: () =>
                         FocusScope.of(context).requestFocus(_passwordFocusNode),
@@ -69,7 +62,6 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     obscureText: true,
-                    controller: _passwordController,
                     focusNode: _passwordFocusNode,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter your password' : null,
@@ -103,7 +95,8 @@ class _AuthPageState extends State<AuthPage> {
                       alignment: Alignment.center,
                       child: InkWell(
                         onTap: () {
-                          //TODO: the currentState method doesn't work and i don't know the reason
+                          //the currentState method doesn't work and i don't know the reason
+                          //WHY ? it doesn't work when there is a controller so I deleted both controllers
                           _formKey.currentState!.reset();
                           authModel.toggleFormType();
                         },
@@ -163,10 +156,8 @@ class _AuthPageState extends State<AuthPage> {
       showDialog(
           context: context,
           builder: (_) => AlertDialog(
-                title: Text(
-                  'Error!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                title: Text('Error!',
+                    style: Theme.of(context).textTheme.titleLarge),
                 content: Text(e.toString(),
                     style: Theme.of(context).textTheme.titleMedium),
                 actions: [

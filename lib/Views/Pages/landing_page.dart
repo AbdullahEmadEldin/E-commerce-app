@@ -23,7 +23,7 @@ class LandingPage extends StatelessWidget {
                 create: (_) => AuthController(auth: auth),
                 child: const AuthPage());
           }
-          return ChangeNotifierProvider(
+          return ChangeNotifierProvider<AuthController>(
               create: (_) => AuthController(auth: auth),
               child: const BottomNavBar());
         }

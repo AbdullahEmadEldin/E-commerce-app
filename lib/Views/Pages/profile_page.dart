@@ -1,5 +1,4 @@
 import 'package:e_commerce_app/Controllers/auth_controller.dart';
-import 'package:e_commerce_app/Services/auth.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
