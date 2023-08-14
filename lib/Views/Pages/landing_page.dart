@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/Controllers/database_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,10 @@ class LandingPage extends StatelessWidget {
           }
           return ChangeNotifierProvider<AuthController>(
               create: (_) => AuthController(auth: auth),
-              child: const BottomNavBar());
+              child: Provider<Database>(
+                  create: (_) => FirestoreDatabase(
+                      user.uid), //user.uid is built attribute of firebase
+                  child: const BottomNavBar()));
         }
         return const Scaffold(
           body: Center(

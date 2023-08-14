@@ -23,7 +23,7 @@ class ProductTileHome extends StatelessWidget {
                   width: 200,
                 ),
               ),
-              product.discout != null ? _discountContainer() : SizedBox(),
+              product.discount != null ? _discountContainer() : SizedBox(),
             ],
           ),
           const SizedBox(height: 8.0),
@@ -47,14 +47,14 @@ class ProductTileHome extends StatelessWidget {
               text: '${product.price}\$',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: const Color.fromARGB(255, 110, 110, 110),
-                  decoration: product.discout != null
+                  decoration: product.discount != null
                       ? TextDecoration.lineThrough
                       : null),
             ),
-            product.discout != null
+            product.discount != null
                 ? TextSpan(
                     text:
-                        '  ${product.price - (product.price * (product.discout ?? 0)) / 100}\$',
+                        '  ${product.price - (product.price * (product.discount ?? 0)) / 100}\$',
                     style: const TextStyle(color: Colors.red))
                 : const TextSpan(),
           ]))
@@ -73,7 +73,7 @@ class ProductTileHome extends StatelessWidget {
             color: Colors.red, borderRadius: BorderRadius.circular(20)),
         child: Center(
             child: Text(
-          "-${product.discout}%",
+          "-${product.discount}%",
           style: TextStyle(color: Colors.white),
         )),
       ),

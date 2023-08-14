@@ -1,13 +1,18 @@
+import 'package:e_commerce_app/Controllers/database_controller.dart';
 import 'package:e_commerce_app/Models/product.dart';
 import 'package:e_commerce_app/Utilities/assets.dart';
 import 'package:e_commerce_app/Views/Widgets/product_tile_home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    ///to use provider of database you need to make that provider a parent widget
+    final databaseProvider = Provider.of<Database>(context);
     return ListView(
       children: [
         Stack(
@@ -49,30 +54,56 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 8),
               SizedBox(
                 height: 300,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: dummyProducts
-                      .map((e) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ProductTileHome(product: e),
-                          ))
-                      .toList(),
-                ),
+                //to consume data coming from database as stream you need to create a StreamBuilder
+                child: StreamBuilder<List<Product>>(
+                    stream: databaseProvider.salesProductStream(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        final productsList = snapshot.data;
+                        if (productsList == null || productsList.isEmpty) {
+                          return const Center(child: Text('No data available'));
+                        }
+                        return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: productsList.length,
+                            itemBuilder: (_, index) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProductTileHome(
+                                      product: productsList[index]),
+                                ));
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
               ),
               _buildHeaderOfList(context,
                   title: 'New', description: 'Super New Products!'),
               const SizedBox(height: 8),
               SizedBox(
                 height: 300,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: dummyProducts
-                      .map((e) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ProductTileHome(product: e),
-                          ))
-                      .toList(),
-                ),
+                child: StreamBuilder<List<Product>>(
+                    stream: databaseProvider.newProductStream(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        final productsList = snapshot.data;
+                        if (productsList == null || productsList.isEmpty) {
+                          return const Center(child: Text('No data available'));
+                        }
+                        return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: productsList.length,
+                            //TODO: when replaced with real firebase database the productTile conditons doesn't work
+                            itemBuilder: (_, index) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProductTileHome(
+                                      product: productsList[index]),
+                                ));
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
               )
             ],
           ),
