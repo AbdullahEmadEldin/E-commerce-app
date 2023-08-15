@@ -1,5 +1,6 @@
 import 'package:e_commerce_app/Models/product.dart';
 import 'package:e_commerce_app/Services/firestore_services.dart';
+import 'package:e_commerce_app/Utilities/api_paths.dart';
 
 abstract class Database {
   Stream<List<Product>> salesProductStream();
@@ -16,7 +17,7 @@ class FirestoreDatabase implements Database {
   @override
   Stream<List<Product>> salesProductStream() {
     return _service.collectionsStream(
-      collectionPath: 'products/',
+      collectionPath: ApiPath.productsCollection(),
       deMapping: (mapData, docId) => Product.formMap(mapData!, docId),
       queryPeocess: (query) => query.where('discount', isNotEqualTo: 0),
     );

@@ -25,6 +25,16 @@ class EcommerceApp extends StatelessWidget {
         title: 'Ecommerce App',
         theme: ThemeData(
             scaffoldBackgroundColor: const Color(0xffF9F9F9),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              iconTheme: const IconThemeData(
+                color: Colors.black,
+              ),
+              titleTextStyle: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!
+                  .copyWith(color: Colors.black),
+            ),
             primarySwatch: Colors.red,
             inputDecorationTheme: InputDecorationTheme(
               fillColor: Color(0xffFFFFFF),

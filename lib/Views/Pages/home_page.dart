@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:e_commerce_app/Controllers/database_controller.dart';
 import 'package:e_commerce_app/Models/product.dart';
 import 'package:e_commerce_app/Utilities/assets.dart';
 import 'package:e_commerce_app/Views/Widgets/product_tile_home.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
