@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 class MainButton extends StatelessWidget {
   final String text;
   final VoidCallback ontap;
-  const MainButton({Key? key, required this.text, required this.ontap})
+  final bool hasCircularBorder;
+  const MainButton(
+      {Key? key,
+      required this.text,
+      required this.ontap,
+      this.hasCircularBorder = false})
       : super(key: key);
 
   @override
@@ -14,6 +19,12 @@ class MainButton extends StatelessWidget {
       //decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
       child: ElevatedButton(
         onPressed: ontap,
+        style: ElevatedButton.styleFrom(
+            shape: hasCircularBorder
+                ? RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  )
+                : null),
         child: Text(text),
       ),
     );
