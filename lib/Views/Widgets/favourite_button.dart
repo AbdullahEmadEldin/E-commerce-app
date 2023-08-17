@@ -20,9 +20,9 @@ class _FavouriteButtonState extends State<FavouriteButton> {
       child: SizedBox(
         height: 50,
         width: 50,
-        child: DecoratedBox(
-          decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+        child: Material(
+          elevation: 4.0,
+          borderRadius: BorderRadius.circular(24),
           child: Icon(
               isFavourite ? Icons.favorite : Icons.favorite_border_rounded,
               color: Colors.red),

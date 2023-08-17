@@ -70,7 +70,9 @@ class HomePage extends StatelessWidget {
                             itemBuilder: (_, index) => Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ProductTileHome(
-                                      product: productsList[index]),
+                                    product: productsList[index],
+                                    isNew: false,
+                                  ),
                                 ));
                       }
                       return const Center(
@@ -98,7 +100,9 @@ class HomePage extends StatelessWidget {
                             itemBuilder: (_, index) => Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ProductTileHome(
-                                      product: productsList[index]),
+                                    product: productsList[index],
+                                    isNew: true,
+                                  ),
                                 ));
                       }
                       return const Center(

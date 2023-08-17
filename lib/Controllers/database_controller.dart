@@ -27,6 +27,7 @@ class FirestoreDatabase implements Database {
   Stream<List<Product>> newProductStream() {
     return _service.collectionsStream(
         collectionPath: 'products/',
-        deMapping: (mapData, docId) => Product.formMap(mapData!, docId));
+        deMapping: (mapData, docId) => Product.formMap(mapData!, docId),
+        queryPeocess: (query) => query.where('discount', isEqualTo: 0));
   }
 }
