@@ -3,9 +3,10 @@ import 'package:e_commerce_app/Views/Widgets/favourite_button.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
 
+import '../Widgets/drop_menu_component.dart';
+
 class ProductDetails extends StatefulWidget {
   final Product product;
-
   const ProductDetails({Key? key, required this.product}) : super(key: key);
 
   @override
@@ -14,6 +15,7 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   bool isFavourite = false;
+  late String? dropdownValue;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -36,12 +38,29 @@ class _ProductDetailsState extends State<ProductDetails> {
             fit: BoxFit.cover,
           ),
           const SizedBox(height: 24),
-          const FavouriteButton(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: DropdownMenuComponent(
+                      items: ['S', 'M', 'L', 'XL', 'XXL'],
+                      hint: 'Size',
+                      onchange: (String? newValue) {
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                      },
+                    )),
+                    Spacer(),
+                    FavouriteButton(),
+                  ],
+                ),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

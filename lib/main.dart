@@ -43,7 +43,7 @@ class EcommerceApp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(3.0),
                   borderSide: const BorderSide(color: Colors.grey)),
               enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(3.0),
+                  borderRadius: BorderRadius.circular(16.0),
                   borderSide: const BorderSide(color: Colors.grey)),
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(3.0),
