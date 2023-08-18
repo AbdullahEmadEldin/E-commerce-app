@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import 'package:e_commerce_app/Controllers/auth_controller.dart';
-import 'package:e_commerce_app/Services/auth.dart';
+import 'package:e_commerce_app/Services/firebase_auth.dart';
 import 'package:e_commerce_app/Views/Pages/auth_page.dart';
 import 'package:e_commerce_app/Views/Pages/bottom_navbar.dart';
 
