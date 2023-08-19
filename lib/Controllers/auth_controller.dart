@@ -46,7 +46,7 @@ class AuthController with ChangeNotifier {
       } else {
         final user = await auth.signUpWithEmailAndPassword(email, password);
         await database.setUserData(UserData(
-          uId: user?.uid ?? kDocIdFromDartGenerator(),
+          uId: user?.uid ?? kIdFromDartGenerator(),
           email: email,
         ));
       }

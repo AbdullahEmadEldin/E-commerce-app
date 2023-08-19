@@ -1,4 +1,6 @@
 class ApiPath {
   static String productsCollection() => 'products/';
-  static String userCollection(uId) => 'users/$uId';
+  static String userDoc(String uId) => 'users/$uId';
+  static String cartProductCollection(String uId, String userProductId) =>
+      'users/$uId/cart/$userProductId';
 }

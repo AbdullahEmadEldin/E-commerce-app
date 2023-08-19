@@ -1,1 +1,1 @@
-String kDocIdFromDartGenerator() => DateTime.now().toIso8601String();
+String kIdFromDartGenerator() => DateTime.now().toIso8601String();

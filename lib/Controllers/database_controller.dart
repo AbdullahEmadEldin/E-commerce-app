@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/Models/product.dart';
+import 'package:e_commerce_app/Models/user_product.dart';
 import 'package:e_commerce_app/Services/firestore_services.dart';
 import 'package:e_commerce_app/Utilities/api_paths.dart';
 
@@ -8,6 +9,7 @@ abstract class Database {
   Stream<List<Product>> salesProductStream();
   Stream<List<Product>> newProductStream();
   Future<void> setUserData(UserData userData);
+  Future<void> addToCart(UserProduct userProduct);
 }
 
 ///this calss' methods will control and call methods from firestore srvices
@@ -37,6 +39,10 @@ class FirestoreDatabase implements Database {
 
   @override
   Future<void> setUserData(UserData userData) => _service.setData(
-      documentPath: ApiPath.userCollection(userData.uId),
-      data: userData.toMap());
+      documentPath: ApiPath.userDoc(userData.uId), data: userData.toMap());
+
+  @override
+  Future<void> addToCart(UserProduct userProduct) => _service.setData(
+      documentPath: ApiPath.cartProductCollection(uId, userProduct.id),
+      data: userProduct.toMap());
 }
