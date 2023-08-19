@@ -3,6 +3,9 @@ import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/Views/Widgets/favourite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
+
+import '../../Controllers/database_controller.dart';
 
 class ProductTileHome extends StatelessWidget {
   final Product product;
@@ -13,9 +16,15 @@ class ProductTileHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final database = Provider.of<Database>(context);
     return InkWell(
-      onTap: () => Navigator.of(context, rootNavigator: true)
-          .pushNamed(AppRoutes.productDetails, arguments: product),
+      onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+        AppRoutes.productDetails,
+        arguments: {
+          'product': product,
+          'database': database,
+        },
+      ),
       child: DecoratedBox(
         decoration: BoxDecoration(),
         child: Stack(

@@ -1,7 +1,12 @@
+import 'package:e_commerce_app/Controllers/database_controller.dart';
 import 'package:e_commerce_app/Models/product.dart';
+import 'package:e_commerce_app/Models/user_product.dart';
+import 'package:e_commerce_app/Utilities/constants.dart';
+import 'package:e_commerce_app/Views/Widgets/dialog.dart';
 import 'package:e_commerce_app/Views/Widgets/favourite_button.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Widgets/drop_menu_component.dart';
 
@@ -19,6 +24,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final database = Provider.of<Database>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product.title),
@@ -98,7 +104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 const SizedBox(height: 16),
                 MainButton(
                   text: 'Add to cart',
-                  ontap: () {},
+                  ontap: () => _addToCart(database),
                   hasCircularBorder: true,
                 )
               ],
@@ -107,5 +113,26 @@ class _ProductDetailsState extends State<ProductDetails> {
         ],
       )),
     );
+  }
+
+  Future<void> _addToCart(Database database) async {
+    final databaseController = Provider.of<Database>(context, listen: false);
+    try {
+      final userProduct = UserProduct(
+          id: kIdFromDartGenerator(),
+          color: 'color',
+          size: dropdownValue ?? 'size',
+          productID: widget.product.productID,
+          title: widget.product.title,
+          price: widget.product.price,
+          imgUrl: widget.product.imgUrl);
+      await databaseController.addToCart(userProduct);
+    } catch (e) {
+      return MainDialog(
+              context: context,
+              title: 'Error',
+              content: 'Coldn\'t add the product to cart, Please try again')
+          .showAlertDialog();
+    }
   }
 }

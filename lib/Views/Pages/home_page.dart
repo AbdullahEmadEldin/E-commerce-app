@@ -96,7 +96,6 @@ class HomePage extends StatelessWidget {
                         return ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: productsList.length,
-                            //TODO: when replaced with real firebase database the productTile conditons doesn't work
                             itemBuilder: (_, index) => Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ProductTileHome(
