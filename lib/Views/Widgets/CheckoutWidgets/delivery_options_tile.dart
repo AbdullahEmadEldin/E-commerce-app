@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../Models/delivery_option.dart';
+
 class DeliveryOptionsTile extends StatelessWidget {
-  final String imageSrc;
-  final String daysForDelivery;
-  const DeliveryOptionsTile(
-      {Key? key, required this.imageSrc, required this.daysForDelivery})
+  final DeliveryOption deliveryOption;
+
+  const DeliveryOptionsTile({Key? key, required this.deliveryOption})
       : super(key: key);
 
   @override
@@ -19,12 +20,12 @@ class DeliveryOptionsTile extends StatelessWidget {
           child: Column(
             children: [
               Image.network(
-                imageSrc,
+                deliveryOption.imgUrl,
                 fit: BoxFit.cover,
                 height: 50,
               ),
               Text(
-                '$daysForDelivery days',
+                '${deliveryOption.days} days',
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!

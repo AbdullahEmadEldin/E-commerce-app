@@ -3,12 +3,14 @@ import 'package:e_commerce_app/Models/user_product.dart';
 import 'package:e_commerce_app/Services/firestore_services.dart';
 import 'package:e_commerce_app/Utilities/api_paths.dart';
 
+import '../Models/delivery_option.dart';
 import '../Models/user.dart';
 
 abstract class Database {
   Stream<List<Product>> salesProductStream();
   Stream<List<Product>> newProductStream();
   Stream<List<UserProduct>> myBag();
+  Stream<List<DeliveryOption>> deliveryOptions();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
 }
@@ -21,6 +23,7 @@ class FirestoreDatabase implements Database {
 
   final _service = FirestoreServices.instance;
 
+  ///Data streams getters *****************************
   @override
   Stream<List<Product>> salesProductStream() {
     return _service.collectionsStream(
@@ -39,6 +42,19 @@ class FirestoreDatabase implements Database {
   }
 
   @override
+  Stream<List<UserProduct>> myBag() => _service.collectionsStream(
+      collectionPath: ApiPath.cartCollection(uId),
+      deMapping: ((data, documentId) =>
+          UserProduct.fromMap(data!, documentId)));
+
+  @override
+  Stream<List<DeliveryOption>> deliveryOptions() => _service.collectionsStream(
+      collectionPath: ApiPath.delivryOptions(),
+      deMapping: (data, documentId) =>
+          DeliveryOption.fromMap(data!, documentId));
+
+  ///Data setters *******************************
+  @override
   Future<void> setUserData(UserData userData) => _service.setData(
       documentPath: ApiPath.userDoc(userData.uId), data: userData.toMap());
 
@@ -46,10 +62,4 @@ class FirestoreDatabase implements Database {
   Future<void> addToCart(UserProduct userProduct) => _service.setData(
       documentPath: ApiPath.cartProductCollection(uId, userProduct.id),
       data: userProduct.toMap());
-
-  @override
-  Stream<List<UserProduct>> myBag() => _service.collectionsStream(
-      collectionPath: ApiPath.cartCollection(uId),
-      deMapping: ((data, documentID) =>
-          UserProduct.fromMap(data!, documentID)));
 }

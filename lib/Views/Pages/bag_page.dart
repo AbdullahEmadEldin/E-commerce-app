@@ -84,8 +84,9 @@ class _BagPageState extends State<BagPage> {
             MainButton(
               text: 'Checkout',
               ontap: () {
-                Navigator.of(context, rootNavigator: true)
-                    .pushNamed(AppRoutes.chekoutPage);
+                Navigator.of(context, rootNavigator: true).pushNamed(
+                    AppRoutes.chekoutPage,
+                    arguments: databaseProvider);
               },
               hasCircularBorder: true,
             )

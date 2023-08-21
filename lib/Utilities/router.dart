@@ -35,7 +35,10 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
               ),
           settings: settings);
     case AppRoutes.chekoutPage:
-      return MaterialPageRoute(builder: (_) => CheckoutPage());
+      final database = settings.arguments as Database;
+      return MaterialPageRoute(
+          builder: (_) =>
+              Provider<Database>.value(value: database, child: CheckoutPage()));
     case AppRoutes.landingPageRoute:
     default:
       return MaterialPageRoute(

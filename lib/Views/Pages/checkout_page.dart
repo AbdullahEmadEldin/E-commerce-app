@@ -1,9 +1,12 @@
+import 'package:e_commerce_app/Controllers/database_controller.dart';
+import 'package:e_commerce_app/Models/delivery_option.dart';
 import 'package:e_commerce_app/Utilities/assets.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/address_tile.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/payment_tile.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
 import 'package:e_commerce_app/Views/Widgets/two_separateditems_row.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Widgets/CheckoutWidgets/delivery_options_tile.dart';
 
@@ -12,6 +15,8 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final databaseProvider = Provider.of<Database>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
@@ -65,17 +70,33 @@ class CheckoutPage extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  DeliveryOptionsTile(
-                    imageSrc: AppAssets.fedExLogo,
-                    daysForDelivery: '2-3',
-                  ),
-                  const SizedBox(width: 16),
-                  DeliveryOptionsTile(
-                      imageSrc: AppAssets.dhlLogo, daysForDelivery: '2-3')
-                ],
-              ),
+              StreamBuilder<List<DeliveryOption>>(
+                  stream: databaseProvider.deliveryOptions(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      final options = snapshot.data;
+                      if (options == null || options.isEmpty) {
+                        return const Center(
+                            child: Text('No delievry options available'));
+                      }
+                      return SizedBox(
+                        height: size.height * 0.15,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: options.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: DeliveryOptionsTile(
+                                deliveryOption: options[index],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return CircularProgressIndicator.adaptive();
+                  }),
               const SizedBox(height: 16),
               const TitleAndValueRow(title: 'Order: ', value: '150\$'),
               const SizedBox(height: 8),
