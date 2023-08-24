@@ -3,6 +3,7 @@ import 'package:e_commerce_app/Models/user_product.dart';
 import 'package:e_commerce_app/Services/firestore_services.dart';
 import 'package:e_commerce_app/Utilities/api_paths.dart';
 
+import '../Models/address_model.dart';
 import '../Models/delivery_option.dart';
 import '../Models/user.dart';
 
@@ -11,8 +12,10 @@ abstract class Database {
   Stream<List<Product>> newProductStream();
   Stream<List<UserProduct>> myBag();
   Stream<List<DeliveryOption>> deliveryOptions();
+  Stream<List<UserAddress>> getUserAddresses();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
+  Future<void> saveAddress(UserAddress usersAddress);
 }
 
 ///this calss' methods will control and call methods from firestore srvices
@@ -23,7 +26,7 @@ class FirestoreDatabase implements Database {
 
   final _service = FirestoreServices.instance;
 
-  ///Data streams getters *****************************
+  ///Data streams (getters) *****************************
   @override
   Stream<List<Product>> salesProductStream() {
     return _service.collectionsStream(
@@ -53,6 +56,11 @@ class FirestoreDatabase implements Database {
       deMapping: (data, documentId) =>
           DeliveryOption.fromMap(data!, documentId));
 
+  @override
+  Stream<List<UserAddress>> getUserAddresses() => _service.collectionsStream(
+      collectionPath: ApiPath.userAddresses(uId),
+      deMapping: (data, documentId) => UserAddress.fromMap(data!, documentId));
+
   ///Data setters *******************************
   @override
   Future<void> setUserData(UserData userData) => _service.setData(
@@ -62,4 +70,9 @@ class FirestoreDatabase implements Database {
   Future<void> addToCart(UserProduct userProduct) => _service.setData(
       documentPath: ApiPath.cartProductCollection(uId, userProduct.id),
       data: userProduct.toMap());
+
+  @override
+  Future<void> saveAddress(UserAddress usersAddress) => _service.setData(
+      documentPath: ApiPath.specificAddress(uId, usersAddress.id),
+      data: usersAddress.toMap());
 }
