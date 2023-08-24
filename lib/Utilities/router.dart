@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Views/Pages/landing_page.dart';
+import 'ArgsModels/add_address_args.dart';
 
 Route<dynamic> routeGenerator(RouteSettings settings) {
   switch (settings.name) {
@@ -42,10 +43,15 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
           builder: (_) =>
               Provider<Database>.value(value: database, child: CheckoutPage()));
     case AppRoutes.addAddressPage:
-      final database = settings.arguments as Database;
+      final args = settings.arguments as AddShippingAddressArgs;
+      final database = args.database;
+      final shippingAddress = args.shippingAddress;
       return MaterialPageRoute(
           builder: (_) => Provider<Database>.value(
-              value: database, child: AddAddressPage()));
+              value: database,
+              child: AddAddressPage(
+                shippingAddress: shippingAddress,
+              )));
     case AppRoutes.viewAddressesPage:
       final database = settings.arguments as Database;
       return MaterialPageRoute(

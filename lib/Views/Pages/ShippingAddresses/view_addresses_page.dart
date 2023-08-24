@@ -15,12 +15,12 @@ class ViewAddressesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Shipping Addresses'),
       ),
-      body: StreamBuilder<List<UserAddress>>(
+      body: StreamBuilder<List<ShippingAddress>>(
           stream: databaseProvider.getUserAddresses(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               final addresses = snapshot.data;
-              
+
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),

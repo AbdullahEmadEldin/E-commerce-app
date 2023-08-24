@@ -12,10 +12,10 @@ abstract class Database {
   Stream<List<Product>> newProductStream();
   Stream<List<UserProduct>> myBag();
   Stream<List<DeliveryOption>> deliveryOptions();
-  Stream<List<UserAddress>> getUserAddresses();
+  Stream<List<ShippingAddress>> getUserAddresses();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
-  Future<void> saveAddress(UserAddress usersAddress);
+  Future<void> saveAddress(ShippingAddress usersAddress);
 }
 
 ///this calss' methods will control and call methods from firestore srvices
@@ -57,9 +57,11 @@ class FirestoreDatabase implements Database {
           DeliveryOption.fromMap(data!, documentId));
 
   @override
-  Stream<List<UserAddress>> getUserAddresses() => _service.collectionsStream(
-      collectionPath: ApiPath.userAddresses(uId),
-      deMapping: (data, documentId) => UserAddress.fromMap(data!, documentId));
+  Stream<List<ShippingAddress>> getUserAddresses() =>
+      _service.collectionsStream(
+          collectionPath: ApiPath.userAddresses(uId),
+          deMapping: (data, documentId) =>
+              ShippingAddress.fromMap(data!, documentId));
 
   ///Data setters *******************************
   @override
@@ -72,7 +74,7 @@ class FirestoreDatabase implements Database {
       data: userProduct.toMap());
 
   @override
-  Future<void> saveAddress(UserAddress usersAddress) => _service.setData(
+  Future<void> saveAddress(ShippingAddress usersAddress) => _service.setData(
       documentPath: ApiPath.specificAddress(uId, usersAddress.id),
       data: usersAddress.toMap());
 }

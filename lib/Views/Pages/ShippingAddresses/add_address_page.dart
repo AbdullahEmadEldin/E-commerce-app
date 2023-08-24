@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import '../../../Controllers/database_controller.dart';
 
 class AddAddressPage extends StatefulWidget {
-  const AddAddressPage({Key? key}) : super(key: key);
+  final ShippingAddress? shippingAddress;
+  const AddAddressPage({Key? key, this.shippingAddress}) : super(key: key);
 
   @override
   _AddAddressPageState createState() => _AddAddressPageState();
@@ -23,6 +24,20 @@ class _AddAddressPageState extends State<AddAddressPage> {
   final _stateController = TextEditingController();
   final _zipcodeController = TextEditingController();
   final _countryController = TextEditingController();
+  ShippingAddress? shippingAddress;
+  @override
+  void initState() {
+    super.initState();
+    shippingAddress = widget.shippingAddress;
+    if (shippingAddress != null) {
+      _fullNameController.text = shippingAddress!.name;
+      _addressController.text = shippingAddress!.address;
+      _cityController.text = shippingAddress!.city;
+      _stateController.text = shippingAddress!.state;
+      _zipcodeController.text = shippingAddress!.postalCode;
+      _countryController.text = shippingAddress!.country;
+    }
+  }
 
   @override
   void dispose() {
@@ -41,7 +56,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Adding Shipping Address',
+          shippingAddress != null
+              ? 'Adding Shipping Address'
+              : 'Editing Shipping Address',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
@@ -125,8 +142,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
   Future<void> _saveAddress(Database database) async {
     try {
       if (_formKey.currentState!.validate()) {
-        final address = UserAddress(
-            id: kIdFromDartGenerator(),
+        final address = ShippingAddress(
+            id: shippingAddress != null
+                ? shippingAddress!.id
+                : kIdFromDartGenerator(),
             name: _fullNameController.text.trim(),
             address: _addressController.text.trim(),
             city: _cityController.text.trim(),

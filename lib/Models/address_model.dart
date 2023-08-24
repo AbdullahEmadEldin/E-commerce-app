@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class UserAddress {
+class ShippingAddress {
   final String id;
   final String name;
   final String address;
@@ -9,7 +9,7 @@ class UserAddress {
   final String postalCode;
   final String country;
 
-  UserAddress(
+  ShippingAddress(
       {required this.id,
       required this.name,
       required this.address,
@@ -31,8 +31,8 @@ class UserAddress {
     return result;
   }
 
-  factory UserAddress.fromMap(Map<String, dynamic> map, documentId) {
-    return UserAddress(
+  factory ShippingAddress.fromMap(Map<String, dynamic> map, documentId) {
+    return ShippingAddress(
       id: documentId ?? '',
       name: map['name'] ?? '',
       address: map['address'] ?? '',

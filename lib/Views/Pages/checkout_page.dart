@@ -37,7 +37,7 @@ class CheckoutPage extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              StreamBuilder<List<UserAddress>>(
+              StreamBuilder<List<ShippingAddress>>(
                   stream: databaseProvider.getUserAddresses(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.active) {
@@ -59,7 +59,7 @@ class CheckoutPage extends StatelessWidget {
                       }
                       //TODO: need to fetch the defult address from viewAddresses page
                       return AddressTile(
-                        address: UserAddress(
+                        address: ShippingAddress(
                             id: '1234',
                             name: 'Name',
                             address: 'st. block no 47',
