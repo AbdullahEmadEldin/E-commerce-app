@@ -5,4 +5,7 @@ class ApiPath {
       'users/$uId/cart/$userProductId';
   static String cartCollection(String uId) => 'users/$uId/cart/';
   static String delivryOptions() => 'delivryOptions/';
+  static String userAddresses(String uId) => 'users/$uId/userAdresses';
+  static String specificAddress(String uId, String addressId) =>
+      'users/$uId/userAdresses/$addressId';
 }
