@@ -21,6 +21,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   //dispose method release the memory resources used by objects or controllers
   //when they no lnoger needed to avoid memory leak
+  ///I removed controller becuase there was inteferance between them and formkey.clear
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,8 @@
 import 'package:e_commerce_app/Controllers/database_controller.dart';
 import 'package:e_commerce_app/Models/product.dart';
 import 'package:e_commerce_app/Utilities/routes.dart';
+import 'package:e_commerce_app/Views/Pages/ShippingAddresses/add_address_page.dart';
+import 'package:e_commerce_app/Views/Pages/ShippingAddresses/view_addresses_page.dart';
 import 'package:e_commerce_app/Views/Pages/auth_page.dart';
 import 'package:e_commerce_app/Views/Pages/bottom_navbar.dart';
 import 'package:e_commerce_app/Views/Pages/checkout_page.dart';
@@ -39,6 +41,16 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (_) =>
               Provider<Database>.value(value: database, child: CheckoutPage()));
+    case AppRoutes.addAddressPage:
+      final database = settings.arguments as Database;
+      return MaterialPageRoute(
+          builder: (_) => Provider<Database>.value(
+              value: database, child: AddAddressPage()));
+    case AppRoutes.viewAddressesPage:
+      final database = settings.arguments as Database;
+      return MaterialPageRoute(
+          builder: (_) => Provider<Database>.value(
+              value: database, child: ViewAddressesPage()));
     case AppRoutes.landingPageRoute:
     default:
       return MaterialPageRoute(
