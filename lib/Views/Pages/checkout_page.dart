@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/Controllers/database_controller.dart';
+import 'package:e_commerce_app/Models/address_model.dart';
 import 'package:e_commerce_app/Models/delivery_option.dart';
-import 'package:e_commerce_app/Utilities/assets.dart';
+import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/add_address_button.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/address_tile.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/payment_tile.dart';
 import 'package:e_commerce_app/Views/Widgets/main_button.dart';
@@ -36,7 +37,40 @@ class CheckoutPage extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              const AddressTile(),
+              StreamBuilder<List<UserAddress>>(
+                  stream: databaseProvider.getUserAddresses(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      final addresses = snapshot.data;
+                      if (addresses == null || addresses.isEmpty) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              const Text(
+                                  'You haven\'t add address yet, Click + to add '),
+                              const SizedBox(height: 4),
+                              AddAddressButton(
+                                database: databaseProvider,
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      //TODO: need to fetch the defult address from viewAddresses page
+                      return AddressTile(
+                        address: UserAddress(
+                            id: '1234',
+                            name: 'Name',
+                            address: 'st. block no 47',
+                            city: 'kafr',
+                            state: 'qleen',
+                            postalCode: '22334',
+                            country: 'sdss'),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator.adaptive());
+                  }),
               const SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
