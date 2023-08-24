@@ -1,21 +1,35 @@
 import 'package:e_commerce_app/Models/address_model.dart';
+import 'package:e_commerce_app/Utilities/ArgsModels/add_address_args.dart';
+import 'package:e_commerce_app/Utilities/api_paths.dart';
 import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Controllers/database_controller.dart';
 
-class AddressTile extends StatelessWidget {
-  final UserAddress address;
+class AddressTile extends StatefulWidget {
+  final ShippingAddress address;
   final bool inViewPage;
   const AddressTile({Key? key, required this.address, this.inViewPage = false})
       : super(key: key);
 
   @override
+  State<AddressTile> createState() => _AddressTileState();
+}
+
+class _AddressTileState extends State<AddressTile> {
+  late bool isDefault;
+  @override
+  void initState() {
+    super.initState();
+    isDefault = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final database = Provider.of<Database>(context);
     return Card(
-      key: Key(address.id),
+      key: Key(widget.address.id),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -26,20 +40,26 @@ class AddressTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  address.name,
+                  widget.address.name,
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 InkWell(
-                    onTap: () => Navigator.of(context).pushNamed(
-                        inViewPage
-                            ? AppRoutes.addAddressPage
-                            : AppRoutes.viewAddressesPage,
-                        arguments: database),
+                    onTap: () {
+                      widget.inViewPage
+                          ? Navigator.of(context).pushNamed(
+                              AppRoutes.addAddressPage,
+                              arguments: AddShippingAddressArgs(
+                                  database: database,
+                                  shippingAddress: widget.address))
+                          : Navigator.of(context).pushNamed(
+                              AppRoutes.viewAddressesPage,
+                              arguments: database);
+                    },
                     child: Text(
-                      inViewPage ? 'Edit' : 'Change',
+                      widget.inViewPage ? 'Edit' : 'Change',
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge!
@@ -48,9 +68,22 @@ class AddressTile extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Text(address.address),
+            Text(widget.address.address),
             Text(
-                '${address.city}, ${address.state} ${address.postalCode}, ${address.country}'),
+                '${widget.address.city}, ${widget.address.state} ${widget.address.postalCode}, ${widget.address.country}'),
+            widget.inViewPage
+                ? CheckboxListTile.adaptive(
+                    title: const Text('Default Shipping address'),
+                    value: isDefault,
+                    onChanged: (newValue) {
+                      setState(() {
+                        isDefault = newValue!;
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: EdgeInsets.zero,
+                  )
+                : const SizedBox()
           ],
         ),
       ),
