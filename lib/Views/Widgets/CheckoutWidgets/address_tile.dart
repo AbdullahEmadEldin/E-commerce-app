@@ -22,7 +22,7 @@ class _AddressTileState extends State<AddressTile> {
   @override
   void initState() {
     super.initState();
-    isDefault = false;
+    isDefault = widget.address.isDefault;
   }
 
   @override
@@ -75,10 +75,14 @@ class _AddressTileState extends State<AddressTile> {
                 ? CheckboxListTile.adaptive(
                     title: const Text('Default Shipping address'),
                     value: isDefault,
-                    onChanged: (newValue) {
+                    onChanged: (newValue) async {
                       setState(() {
                         isDefault = newValue!;
                       });
+                      //TODO: logic of making one default address
+                      final defaultAddress =
+                          widget.address.copyWith(isDefault: newValue);
+                      await database.saveAddress(defaultAddress);
                     },
                     controlAffinity: ListTileControlAffinity.leading,
                     contentPadding: EdgeInsets.zero,

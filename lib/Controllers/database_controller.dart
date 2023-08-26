@@ -12,7 +12,8 @@ abstract class Database {
   Stream<List<Product>> newProductStream();
   Stream<List<UserProduct>> myBag();
   Stream<List<DeliveryOption>> deliveryOptions();
-  Stream<List<ShippingAddress>> getUserAddresses();
+  Stream<List<ShippingAddress>> getShippingAddresses();
+  Stream<List<ShippingAddress>> getDefaultShippingAddress();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
   Future<void> saveAddress(ShippingAddress usersAddress);
@@ -27,6 +28,7 @@ class FirestoreDatabase implements Database {
   final _service = FirestoreServices.instance;
 
   ///Data streams (getters) *****************************
+  //QueryProcess methods
   @override
   Stream<List<Product>> salesProductStream() {
     return _service.collectionsStream(
@@ -57,11 +59,19 @@ class FirestoreDatabase implements Database {
           DeliveryOption.fromMap(data!, documentId));
 
   @override
-  Stream<List<ShippingAddress>> getUserAddresses() =>
+  Stream<List<ShippingAddress>> getShippingAddresses() =>
       _service.collectionsStream(
           collectionPath: ApiPath.userAddresses(uId),
           deMapping: (data, documentId) =>
               ShippingAddress.fromMap(data!, documentId));
+  @override
+  Stream<List<ShippingAddress>> getDefaultShippingAddress() =>
+      _service.collectionsStream(
+        collectionPath: ApiPath.userAddresses(uId),
+        deMapping: (data, documentId) =>
+            ShippingAddress.fromMap(data!, documentId),
+        queryPeocess: (query) => query.where('isDefault', isEqualTo: true),
+      );
 
   ///Data setters *******************************
   @override

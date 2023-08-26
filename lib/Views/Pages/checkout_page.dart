@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/Controllers/database_controller.dart';
 import 'package:e_commerce_app/Models/address_model.dart';
 import 'package:e_commerce_app/Models/delivery_option.dart';
+import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/add_address_button.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/address_tile.dart';
 import 'package:e_commerce_app/Views/Widgets/CheckoutWidgets/payment_tile.dart';
@@ -29,16 +30,26 @@ class CheckoutPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Shipping address',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Shipping address',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                      onPressed: () => Navigator.of(context).pushNamed(
+                          AppRoutes.viewAddressesPage,
+                          arguments: databaseProvider),
+                      icon: const Icon(Icons.exit_to_app))
+                ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               StreamBuilder<List<ShippingAddress>>(
-                  stream: databaseProvider.getUserAddresses(),
+                  stream: databaseProvider.getDefaultShippingAddress(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.active) {
                       final addresses = snapshot.data;
@@ -48,7 +59,7 @@ class CheckoutPage extends StatelessWidget {
                           child: Column(
                             children: [
                               const Text(
-                                  'You haven\'t add address yet, Click + to add '),
+                                  'choose your default address or create one'),
                               const SizedBox(height: 4),
                               AddAddressButton(
                                 database: databaseProvider,
@@ -57,16 +68,9 @@ class CheckoutPage extends StatelessWidget {
                           ),
                         );
                       }
-                      //TODO: need to fetch the defult address from viewAddresses page
+                      final defaultAddress = addresses.first;
                       return AddressTile(
-                        address: ShippingAddress(
-                            id: '1234',
-                            name: 'Name',
-                            address: 'st. block no 47',
-                            city: 'kafr',
-                            state: 'qleen',
-                            postalCode: '22334',
-                            country: 'sdss'),
+                        address: defaultAddress,
                       );
                     }
                     return Center(child: CircularProgressIndicator.adaptive());

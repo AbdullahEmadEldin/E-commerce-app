@@ -13,10 +13,10 @@ class ViewAddressesPage extends StatelessWidget {
     final databaseProvider = Provider.of<Database>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shipping Addresses'),
+        title: const Text('Shipping Addresses'),
       ),
       body: StreamBuilder<List<ShippingAddress>>(
-          stream: databaseProvider.getUserAddresses(),
+          stream: databaseProvider.getShippingAddresses(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               final addresses = snapshot.data;
