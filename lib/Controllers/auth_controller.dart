@@ -6,18 +6,23 @@ import 'package:e_commerce_app/Utilities/enums.dart';
 import 'package:flutter/material.dart';
 
 class AuthController with ChangeNotifier {
-  final AuthBase auth;
+  final AuthService auth;
   String email;
   String password;
   AuthFormType authFormType;
   //TODO: this part not clear and need more understanding
   final Repository database = FirestoreRepo('123');
+
+  /// why you didn't make string, email and authFormType finals ???
+  /// to enable editing on them in copywith method
   AuthController(
       {required this.auth,
       this.email = '',
       this.password = '',
       this.authFormType = AuthFormType.login});
 
+  ///copywith method should return object of the model if you will use it outside the calss
+  ///but here we will use it inside the calss only to edit on some variables without create new object
   void copyWith({
     String? email,
     String? password,
@@ -29,6 +34,7 @@ class AuthController with ChangeNotifier {
     notifyListeners();
   }
 
+  ///update email and password stands for textControllers
   void updateEmail(String email) => copyWith(email: email);
   void updatePassword(String password) => copyWith(password: password);
 
@@ -36,6 +42,7 @@ class AuthController with ChangeNotifier {
     final formType = authFormType == AuthFormType.login
         ? AuthFormType.register
         : AuthFormType.login;
+    //بصفر الايميل والباسورد لما يغير من اللوجين
     copyWith(email: '', password: '', authFormType: formType);
   }
 

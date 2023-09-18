@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class AuthBase {
+abstract class AuthService {
   Future<User?> loginWithEmailAndPassword(String email, String password);
   Future<User?> signUpWithEmailAndPassword(String email, String password);
   User? get currentUser;
@@ -8,7 +8,7 @@ abstract class AuthBase {
   Future<void> logOut();
 }
 
-class Auth implements AuthBase {
+class Auth implements AuthService {
   final _firebaseAuth = FirebaseAuth.instance;
 
   @override

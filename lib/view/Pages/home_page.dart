@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/Utilities/assets.dart';
 import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +14,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: It's not best practice to trigger the BlocProvider inside build method
-
     BlocProvider.of<ProductCubit>(context).retrieveAllProducts();
     final size = MediaQuery.of(context).size;
 
@@ -25,7 +24,7 @@ class HomePage extends StatelessWidget {
         Stack(
           children: [
             Image.asset(
-              'assets/images/home_page_panner.png',
+              AppAssets.homePagePanner,
               width: double.infinity,
               height: size.height * 0.3,
               fit: BoxFit.cover,
