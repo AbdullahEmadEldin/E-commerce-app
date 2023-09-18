@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/business_logic_layer/auth_cubit/auth_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:flutter/material.dart';
@@ -14,28 +15,30 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthBase>(context, listen: false);
+    final authService =
+        BlocProvider.of<AuthCubit>(context, listen: false).authService;
+    //final auth = Provider.of<AuthService>(context, listen: false);
     return StreamBuilder<User?>(
-      stream: auth.authStateChanges(),
+      stream: authService.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final user = snapshot.data;
           if (user == null) {
-            return ChangeNotifierProvider<AuthController>(
-                create: (_) => AuthController(auth: auth),
+            return BlocProvider(
+                create: (_) => AuthCubit(authService: authService),
                 child: const AuthPage());
           }
-          return ChangeNotifierProvider<AuthController>(
-            create: (_) => AuthController(auth: auth),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) =>
-                      ProductCubit(productsRepositroy: FirestoreRepo(user.uid)),
-                ),
-              ],
-              child: const BottomNavBar(),
-            ),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => AuthCubit(authService: authService),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    ProductCubit(productsRepositroy: FirestoreRepo(user.uid)),
+              ),
+            ],
+            child: const BottomNavBar(),
           );
         }
         return const Scaffold(

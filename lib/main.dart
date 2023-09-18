@@ -1,6 +1,9 @@
+import 'package:e_commerce_app/business_logic_layer/auth_cubit/auth_cubit.dart';
 import 'package:e_commerce_app/data_layer/Services/firebase_auth.dart';
+import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -18,8 +21,8 @@ class EcommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<AuthBase>(
-      create: (_) => Auth(),
+    return BlocProvider<AuthCubit>(
+      create: (_) => AuthCubit(authService: Auth()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Ecommerce App',
