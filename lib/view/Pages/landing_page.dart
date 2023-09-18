@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/business_logic_layer/auth_cubit/auth_cubit.dart';
+import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:e_commerce_app/view/Pages/auth_page.dart';
 import 'package:e_commerce_app/view/Pages/bottom_navbar.dart';
 
 class LandingPage extends StatelessWidget {
+  static User? user;
   const LandingPage({Key? key}) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class LandingPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final user = snapshot.data;
+          LandingPage.user = user;
           if (user == null) {
             return BlocProvider(
                 create: (_) => AuthCubit(authService: authService),
@@ -36,6 +39,10 @@ class LandingPage extends StatelessWidget {
               BlocProvider(
                 create: (context) =>
                     ProductCubit(productsRepositroy: FirestoreRepo(user.uid)),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    CartCubit(cartRepository: FirestoreRepo(user.uid)),
               ),
             ],
             child: const BottomNavBar(),

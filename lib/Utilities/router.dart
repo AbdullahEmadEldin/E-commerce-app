@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:e_commerce_app/data_layer/Models/product.dart';
 import 'package:e_commerce_app/Utilities/routes.dart';
@@ -9,6 +10,7 @@ import 'package:e_commerce_app/view/Pages/checkout_page.dart';
 import 'package:e_commerce_app/view/Pages/product_details.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../view/Pages/landing_page.dart';
@@ -31,7 +33,12 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
       final product = settings.arguments as Product;
       //final repository = args['repo'];
       return MaterialPageRoute(
-          builder: (_) => ProductDetails(product: product), settings: settings);
+          builder: (_) => BlocProvider(
+                create: (context) => CartCubit(
+                    cartRepository: FirestoreRepo(LandingPage.user!.uid)),
+                child: ProductDetails(product: product),
+              ),
+          settings: settings);
     case AppRoutes.chekoutPage:
       final database = settings.arguments as Repository;
       return MaterialPageRoute(

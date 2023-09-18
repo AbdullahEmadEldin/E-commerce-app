@@ -1,4 +1,4 @@
-import 'package:e_commerce_app/view/Pages/bag_page.dart';
+import 'package:e_commerce_app/view/Pages/cart_page.dart';
 import 'package:e_commerce_app/view/Pages/home_page.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +18,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   ///the buildScreens list and navBarItems list must have the same num of items
   ///and in the desired order because they are linked together
   List<Widget> _buildScreens() {
-    return [HomePage(), Container(), BagPage(), Container(), ProfilePage()];
+    return [HomePage(), Container(), CartPage(), Container(), ProfilePage()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

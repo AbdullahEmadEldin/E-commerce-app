@@ -17,8 +17,6 @@ class HomePage extends StatelessWidget {
     BlocProvider.of<ProductCubit>(context).retrieveAllProducts();
     final size = MediaQuery.of(context).size;
 
-    ///to use provider of database you need to make that provider a parent widget
-
     return ListView(
       children: [
         Stack(
@@ -105,7 +103,7 @@ class HomePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: ProductTileHome(
                                   product: newProducts[index],
-                                  isNew: false,
+                                  isNew: true,
                                 ),
                               ));
                     } else {

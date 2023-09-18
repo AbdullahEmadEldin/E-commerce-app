@@ -1,12 +1,10 @@
-import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
+import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/product.dart';
-import 'package:e_commerce_app/data_layer/Models/user_product.dart';
-import 'package:e_commerce_app/Utilities/constants.dart';
-import 'package:e_commerce_app/view/Widgets/dialog.dart';
+
 import 'package:e_commerce_app/view/Widgets/favourite_button.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../Widgets/drop_menu_component.dart';
 
@@ -20,10 +18,11 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   bool isFavourite = false;
-  late String? dropdownValue;
+  String? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
+    final cartCubit = BlocProvider.of<CartCubit>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +103,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                 const SizedBox(height: 16),
                 MainButton(
                   text: 'Add to cart',
-                  ontap: () => _addToCart(),
+                  ontap: () =>
+                      cartCubit.addToCart(widget.product, dropdownValue),
                   hasCircularBorder: true,
                 )
               ],
@@ -113,26 +113,5 @@ class _ProductDetailsState extends State<ProductDetails> {
         ],
       )),
     );
-  }
-
-  Future<void> _addToCart() async {
-    final databaseController = Provider.of<Repository>(context, listen: false);
-    try {
-      final userProduct = UserProduct(
-          id: kIdFromDartGenerator(),
-          color: 'color',
-          size: dropdownValue ?? 'size',
-          productID: widget.product.productID,
-          title: widget.product.title,
-          price: widget.product.price,
-          imgUrl: widget.product.imgUrl);
-      await databaseController.addToCart(userProduct);
-    } catch (e) {
-      return MainDialog(
-              context: context,
-              title: 'Error',
-              content: 'Coldn\'t add the product to cart, Please try again')
-          .showAlertDialog();
-    }
   }
 }
