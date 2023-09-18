@@ -34,6 +34,11 @@ class _AuthPageState extends State<AuthPage> {
         if (state is AuthLoading) {
           isLoading = true;
         } else if (state is SuccessfulAuth) {
+          //TODO: authentication tip:
+          //when you submit it goes directly to the bottomNavBar without Navigation hooooooow?
+          //because the landinPage mediator and have StramBuilder
+          // StreamBuilder is a widget that builds itself based on the latest snapshot of interaction with a stream
+          //So, when you submit, the snapshot.data is updated with the correct user ans password and then logIn...
           isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -172,31 +177,5 @@ class _AuthPageState extends State<AuthPage> {
         );
       },
     );
-  }
-
-  /// Helper functions
-  Future<void> _submit(AuthCubit auth) async {
-    try {
-      //TODO: authentication tip:
-      //when you submit it goes directly to the bottomNavBar without Navigation hooooooow?
-      //because the landinPage mediator and have StramBuilder
-      // StreamBuilder is a widget that builds itself based on the latest snapshot of interaction with a stream
-      //So, when you submit, the snapshot.data is updated with the correct user ans password and then logIn...
-      await auth.submit();
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-                title: Text('Error!',
-                    style: Theme.of(context).textTheme.titleLarge),
-                content: Text(e.toString(),
-                    style: Theme.of(context).textTheme.titleMedium),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text('Ok'))
-                ],
-              ));
-    }
   }
 }
