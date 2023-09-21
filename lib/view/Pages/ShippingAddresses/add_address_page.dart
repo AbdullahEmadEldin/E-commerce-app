@@ -1,8 +1,11 @@
+import 'package:e_commerce_app/Utilities/routes.dart';
+import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/address_model.dart';
 import 'package:e_commerce_app/Utilities/constants.dart';
 import 'package:e_commerce_app/view/Widgets/dialog.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data_layer/repository/firestore_repo.dart';
@@ -16,6 +19,8 @@ class AddAddressPage extends StatefulWidget {
 }
 
 class _AddAddressPageState extends State<AddAddressPage> {
+  bool saveAddressDone = false;
+  bool saveAddressFailed = false;
   final _formKey = GlobalKey<FormState>();
   //fields controllers
   final _fullNameController = TextEditingController();
@@ -52,7 +57,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   @override
   Widget build(BuildContext context) {
-    final databaseProvider = Provider.of<Repository>(context);
+    final saveAddressCubit = BlocProvider.of<UserPrefCubit>(context);
+    // final databaseProvider = Provider.of<Repository>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -127,11 +133,49 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     value!.isEmpty ? 'Please enter your country' : null,
               ),
               const SizedBox(height: 32),
-              MainButton(
-                text: 'Save address',
-                ontap: () => _saveAddress(databaseProvider),
-                hasCircularBorder: true,
-              )
+              BlocListener<UserPrefCubit, UserPrefState>(
+                listener: (context, state) {
+                  if (state is SaveAddressSucess) {
+                    saveAddressDone = true;
+                  } else if (state is SaveAddressFailed) {
+                    saveAddressFailed = true;
+                  }
+                  print('boool11: $saveAddressDone');
+                  print('boool22: $saveAddressFailed');
+                  saveAddressDone
+                      ? MainDialog(
+                          context: context,
+                          title: ' saving address',
+                          content: 'Address saved successfully',
+                        ).showAlertDialog()
+                      : const SizedBox();
+                  saveAddressFailed
+                      ? MainDialog(
+                              context: context,
+                              title: 'Error saving address',
+                              content: 'state.errorMsg.toString()')
+                          .showAlertDialog()
+                      : const SizedBox();
+                },
+                child: MainButton(
+                  text: 'Save address',
+                  ontap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await saveAddressCubit.saveUserAddress(ShippingAddress(
+                          id: shippingAddress != null
+                              ? shippingAddress!.id
+                              : kIdFromDartGenerator(),
+                          name: _fullNameController.text.trim(),
+                          address: _addressController.text.trim(),
+                          city: _cityController.text.trim(),
+                          state: _stateController.text.trim(),
+                          postalCode: _zipcodeController.text.trim(),
+                          country: _countryController.text.trim()));
+                    }
+                  },
+                  hasCircularBorder: true,
+                ),
+              ),
             ]),
           ),
         ),
@@ -139,29 +183,29 @@ class _AddAddressPageState extends State<AddAddressPage> {
     );
   }
 
-  Future<void> _saveAddress(Repository database) async {
-    try {
-      if (_formKey.currentState!.validate()) {
-        final address = ShippingAddress(
-            id: shippingAddress != null
-                ? shippingAddress!.id
-                : kIdFromDartGenerator(),
-            name: _fullNameController.text.trim(),
-            address: _addressController.text.trim(),
-            city: _cityController.text.trim(),
-            state: _stateController.text.trim(),
-            postalCode: _zipcodeController.text.trim(),
-            country: _countryController.text.trim());
-        await database.saveAddress(address);
-        if (!mounted) return;
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      MainDialog(
-              context: context,
-              title: 'Error saving address',
-              content: e.toString())
-          .showAlertDialog();
-    }
-  }
+  // Future<void> _saveAddress(Repository database) async {
+  //   try {
+  //     if (_formKey.currentState!.validate()) {
+  //       final address = ShippingAddress(
+  //           id: shippingAddress != null
+  //               ? shippingAddress!.id
+  //               : kIdFromDartGenerator(),
+  //           name: _fullNameController.text.trim(),
+  //           address: _addressController.text.trim(),
+  //           city: _cityController.text.trim(),
+  //           state: _stateController.text.trim(),
+  //           postalCode: _zipcodeController.text.trim(),
+  //           country: _countryController.text.trim());
+  //       await database.saveAddress(address);
+  //       if (!mounted) return;
+  //       Navigator.pop(context);
+  //     }
+  //   } catch (e) {
+  //     MainDialog(
+  //             context: context,
+  //             title: 'Error saving address',
+  //             content: e.toString())
+  //         .showAlertDialog();
+  //   }
+  // }
 }

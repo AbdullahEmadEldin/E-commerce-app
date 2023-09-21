@@ -1,4 +1,6 @@
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
+import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
+import 'package:e_commerce_app/data_layer/Models/address_model.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:e_commerce_app/data_layer/Models/product.dart';
 import 'package:e_commerce_app/Utilities/routes.dart';
@@ -31,7 +33,6 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
       //TODO: A massive refactor should be done in this part and it's realted files:
       //product_tile_home &&& product_details
       final product = settings.arguments as Product;
-      //final repository = args['repo'];
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) => CartCubit(
@@ -40,25 +41,32 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
               ),
           settings: settings);
     case AppRoutes.chekoutPage:
-      final database = settings.arguments as Repository;
+      // final database = settings.arguments as Repository;
       return MaterialPageRoute(
-          builder: (_) => Provider<Repository>.value(
-              value: database, child: CheckoutPage()));
+          builder: (_) => BlocProvider(
+                create: (context) => UserPrefCubit(
+                    repository: FirestoreRepo(LandingPage.user!.uid)),
+                child: CheckoutPage(),
+              ));
     case AppRoutes.addAddressPage:
-      final args = settings.arguments as AddShippingAddressArgs;
-      final database = args.database;
-      final shippingAddress = args.shippingAddress;
+      // final args = settings.arguments as AddShippingAddressArgs;
+      // final database = args.database;
+      final shippingAddress = settings.arguments as ShippingAddress?;
       return MaterialPageRoute(
-          builder: (_) => Provider<Repository>.value(
-              value: database,
-              child: AddAddressPage(
-                shippingAddress: shippingAddress,
-              )));
+          builder: (_) => BlocProvider(
+                create: (context) => UserPrefCubit(
+                    repository: FirestoreRepo(LandingPage.user!.uid)),
+                child: AddAddressPage(
+                  shippingAddress: shippingAddress,
+                ),
+              ));
     case AppRoutes.viewAddressesPage:
-      final database = settings.arguments as Repository;
       return MaterialPageRoute(
-          builder: (_) => Provider<Repository>.value(
-              value: database, child: ViewAddressesPage()));
+          builder: (_) => BlocProvider(
+                create: (context) => UserPrefCubit(
+                    repository: FirestoreRepo(LandingPage.user!.uid)),
+                child: ViewAddressesPage(),
+              ));
     case AppRoutes.landingPageRoute:
     default:
       return MaterialPageRoute(
