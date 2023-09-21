@@ -19,7 +19,11 @@ class FirestoreServices {
   }) async {
     final reference = _firestore.doc(documentPath);
     debugPrint('Request data: $data');
-    await reference.set(data);
+    try {
+      await reference.set(data);
+    } catch (e) {
+      print('firestore_service exception: ${e.toString()}');
+    }
   }
 
   Future<void> deleteData({required String documentPath}) async {

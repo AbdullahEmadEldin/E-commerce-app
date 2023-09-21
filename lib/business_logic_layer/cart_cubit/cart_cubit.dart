@@ -41,6 +41,7 @@ class CartCubit extends Cubit<CartState> {
     }, onError: (error) {
       print('erorrrrrrrrr getttting cart products');
       emit(FailureCartProducts(errorMsg: error.toString()));
+      close();
     });
   }
 
