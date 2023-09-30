@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/data_layer/Models/address_model.dart';
@@ -14,23 +13,35 @@ class UserPrefCubit extends Cubit<UserPrefState> {
   StreamSubscription<List<ShippingAddress>>? allAddressStreamSubScription;
   StreamSubscription<List<ShippingAddress>>? defaultAddressStreamSubScription;
   UserPrefCubit({required this.repository}) : super(UserPrefInitial());
+  String test = 'cubit wrapping test';
 
-  Future<void> getAllAddress() async {
+  List<ShippingAddress> address = [];
+
+  Future<List<ShippingAddress>> getAllAddress() async {
     emit(ShippingAddressesLoading());
+
     allAddressStreamSubScription =
         repository.getShippingAddresses().listen((shippingAddresses) {
+      Future.delayed(Duration.zero, () async {
+        address = shippingAddresses;
+        print('address list from cubit:===> ${address.first.address}');
+      });
+
       emit(ShippingAddressesSucess(shippingAddress: shippingAddresses));
     }, onError: (error) {
       print('all addressss failure : ${error.toString()}');
       emit(ShippingAddressesFailure(errorMsg: error.toString()));
     });
+    Future.delayed(const Duration(milliseconds: 200), () async {
+      print('out of the future inside the CUBIT:::?   ${address.isEmpty}');
+    });
+    return address;
   }
 
   Future<void> getDefaultShippingAddress() async {
     emit(DefaultShippingAddressLoading());
     defaultAddressStreamSubScription =
         repository.getDefaultShippingAddress().listen((shippingAddresses) {
-      print('deffffault shipppping addddddresss sucesssssss');
       emit(DefaultShippingAddressSucess(shippingAddress: shippingAddresses));
     }, onError: (error) {
       print('Faaaaaauilure of default adddresss state: ${error.toString()}');

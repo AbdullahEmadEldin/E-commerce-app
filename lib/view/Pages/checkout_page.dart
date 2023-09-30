@@ -22,7 +22,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    //TODO: search about why defining cubit with constructor not bloc provider fixed the problem
+    //TODO: search about why defining cubit with constructor not bloc provider fixed the problem DONEEEE
+    ///by using Provider.of(context) you just access the cubit to instantiate new one
+    ///but by using cubit constructor you instantiate new object which is not best practice
     final defaultAddressCubit =
         UserPrefCubit(repository: FirestoreRepo(LandingPage.user!.uid));
     defaultAddressCubit.getDefaultShippingAddress();

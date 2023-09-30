@@ -65,13 +65,14 @@ class FirestoreRepo implements Repository {
           deMapping: (data, documentId) =>
               ShippingAddress.fromMap(data!, documentId));
   @override
-  Stream<List<ShippingAddress>> getDefaultShippingAddress() =>
-      _service.collectionsStream(
-        collectionPath: ApiPath.userAddresses(uId),
-        deMapping: (data, documentId) =>
-            ShippingAddress.fromMap(data!, documentId),
-        queryPeocess: (query) => query.where('isDefault', isEqualTo: true),
-      );
+  Stream<List<ShippingAddress>> getDefaultShippingAddress() {
+    return _service.collectionsStream(
+      collectionPath: ApiPath.userAddresses(uId),
+      deMapping: (data, documentId) =>
+          ShippingAddress.fromMap(data!, documentId),
+      queryPeocess: (query) => query.where('isDefault', isEqualTo: true),
+    );
+  }
 
   ///Data setters *******************************
   @override

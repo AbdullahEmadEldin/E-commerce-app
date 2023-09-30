@@ -8,8 +8,8 @@ class ShippingAddress {
   final String state;
   final String postalCode;
   final String country;
-  final isDefault;
-
+  bool isDefault;
+  int defaultIndex;
   ShippingAddress({
     required this.id,
     required this.name,
@@ -19,6 +19,7 @@ class ShippingAddress {
     required this.postalCode,
     required this.country,
     this.isDefault = false,
+    this.defaultIndex = -1,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +32,7 @@ class ShippingAddress {
     result.addAll({'postalCode': postalCode});
     result.addAll({'country': country});
     result.addAll({'isDefault': isDefault});
+    result.addAll({'defaultIndex': defaultIndex});
 
     return result;
   }
@@ -45,6 +47,7 @@ class ShippingAddress {
       postalCode: map['postalCode'] ?? '',
       country: map['country'] ?? '',
       isDefault: map['isDefault'] ?? false,
+      defaultIndex: map['defaultIndex'] ?? -1,
     );
   }
 
@@ -57,6 +60,7 @@ class ShippingAddress {
     String? postalCode,
     String? country,
     bool? isDefault,
+    int? defaultIndex,
   }) {
     return ShippingAddress(
       id: id ?? this.id,
@@ -67,6 +71,7 @@ class ShippingAddress {
       postalCode: postalCode ?? this.postalCode,
       country: country ?? this.country,
       isDefault: isDefault ?? this.isDefault,
+      defaultIndex: defaultIndex ?? this.defaultIndex,
     );
   }
 }
