@@ -6,15 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ViewAddressesPage extends StatefulWidget {
-  const ViewAddressesPage({Key? key}) : super(key: key);
+  int sharedValue;
+
+  ViewAddressesPage({Key? key, required this.sharedValue}) : super(key: key);
 
   @override
   State<ViewAddressesPage> createState() => _ViewAddressesPageState();
 }
 
 class _ViewAddressesPageState extends State<ViewAddressesPage> {
-  int? sharedValue = -1;
   int selectedIndex = -1;
+
   bool isDefault = false;
   List<ShippingAddress> defaultAddress = [];
 
@@ -23,12 +25,10 @@ class _ViewAddressesPageState extends State<ViewAddressesPage> {
       defaultAddress = BlocProvider.of<UserPrefCubit>(context).address;
       print('local addresses is empty ????  ${defaultAddress.isEmpty}');
       for (var address in defaultAddress) {
-        print('looop order');
         if (address.isDefault) {
           selectedIndex = address.defaultIndex;
-          sharedValue = address.defaultIndex;
-          print(
-              'selectedIndex is setted successfully == $selectedIndex, shared Vaaalue: $sharedValue');
+
+          print('selectedIndex is setted successfully == $selectedIndex');
         }
       }
     });
@@ -47,6 +47,9 @@ class _ViewAddressesPageState extends State<ViewAddressesPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('===========');
+    print(widget.sharedValue);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shipping Addresses'),
@@ -96,9 +99,9 @@ class _ViewAddressesPageState extends State<ViewAddressesPage> {
     return RadioListTile(
       title: const Text('Default Shipping address'),
       value: index,
-      groupValue: sharedValue,
+      groupValue: widget.sharedValue,
       onChanged: (newValue) async {
-        sharedValue = newValue;
+        widget.sharedValue = newValue;
         print(
             'first value of selected index::: $selectedIndex,data base index::  ${addresses[index].defaultIndex}');
         if (selectedIndex != -1) {

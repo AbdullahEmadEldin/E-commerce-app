@@ -21,19 +21,10 @@ class AddressTile extends StatefulWidget {
 }
 
 class _AddressTileState extends State<AddressTile> {
-  bool isDefault = false;
-
-  @override
-  // void initState() {
-  //   super.initState();
-  //   isDefault = widget.address.isDefault;
-  //   if (isDefault) sharedRadioValue = widget.index;
-  // }
+  int sharedValue = -1;
 
   @override
   Widget build(BuildContext context) {
-    // final database = Provider.of<Repository>(context);
-
     return Card(
       key: Key(widget.address.id),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -70,13 +61,14 @@ class _AddressTileState extends State<AddressTile> {
   InkWell _editAddress(BuildContext context) {
     return InkWell(
         onTap: () {
+          widget.address.isDefault
+              ? sharedValue = widget.address.defaultIndex
+              : sharedValue;
           widget.inViewPage
               ? Navigator.of(context).pushNamed(AppRoutes.addAddressPage,
                   arguments: widget.address)
-              : Navigator.of(context).pushNamed(
-                  AppRoutes.viewAddressesPage,
-                  // arguments: database
-                );
+              : Navigator.of(context).pushNamed(AppRoutes.viewAddressesPage,
+                  arguments: sharedValue);
         },
         child: Text(
           widget.inViewPage ? 'Edit' : 'Change',

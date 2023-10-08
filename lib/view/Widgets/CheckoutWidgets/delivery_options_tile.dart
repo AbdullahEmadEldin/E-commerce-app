@@ -19,8 +19,8 @@ class DeliveryOptionsTile extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Image.network(
-                deliveryOption.imgUrl,
+              Image.asset(
+                'assets/images/fedex.png',
                 fit: BoxFit.cover,
                 height: 50,
               ),
