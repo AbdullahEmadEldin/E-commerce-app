@@ -56,3 +56,14 @@ final class DeliveryOptionsFailure extends UserPrefState {
   final String errorMsg;
   DeliveryOptionsFailure({required this.errorMsg});
 }
+
+///Payment States:
+final class PaymentLoading extends UserPrefState {}
+
+final class PaymentSuccess extends UserPrefState {}
+
+final class PaymentFailure extends UserPrefState {
+  final String errorMsg;
+
+  PaymentFailure({required this.errorMsg});
+}

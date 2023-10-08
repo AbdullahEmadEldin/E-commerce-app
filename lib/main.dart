@@ -1,9 +1,10 @@
 import 'package:e_commerce_app/business_logic_layer/auth_cubit/auth_cubit.dart';
 import 'package:e_commerce_app/data_layer/Services/firebase_auth.dart';
-import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
+import 'package:e_commerce_app/data_layer/Services/stripe_payment/stripe_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'firebase_options.dart';
 
 import 'package:e_commerce_app/Utilities/routes.dart';
@@ -11,6 +12,9 @@ import 'package:e_commerce_app/Utilities/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Stripe.publishableKey = StripeApis.puplishedKey;
+  await Stripe.instance.applySettings();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const EcommerceApp());

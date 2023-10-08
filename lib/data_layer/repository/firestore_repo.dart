@@ -32,7 +32,7 @@ class FirestoreRepo implements Repository {
   @override
   Stream<List<Product>> salesProductStream() {
     return _service.collectionsStream(
-      collectionPath: ApiPath.productsCollection(),
+      collectionPath: FirestoreApiPath.productsCollection(),
       deMapping: (mapData, docId) => Product.formMap(mapData!, docId),
       queryPeocess: (query) => query.where('discount', isNotEqualTo: 0),
     );
@@ -48,26 +48,26 @@ class FirestoreRepo implements Repository {
 
   @override
   Stream<List<UserProduct>> myBag() => _service.collectionsStream(
-      collectionPath: ApiPath.cartCollection(uId),
+      collectionPath: FirestoreApiPath.cartCollection(uId),
       deMapping: ((data, documentId) =>
           UserProduct.fromMap(data!, documentId)));
 
   @override
   Stream<List<DeliveryOption>> deliveryOptions() => _service.collectionsStream(
-      collectionPath: ApiPath.delivryOptions(),
+      collectionPath: FirestoreApiPath.delivryOptions(),
       deMapping: (data, documentId) =>
           DeliveryOption.fromMap(data!, documentId));
 
   @override
   Stream<List<ShippingAddress>> getShippingAddresses() =>
       _service.collectionsStream(
-          collectionPath: ApiPath.userAddresses(uId),
+          collectionPath: FirestoreApiPath.userAddresses(uId),
           deMapping: (data, documentId) =>
               ShippingAddress.fromMap(data!, documentId));
   @override
   Stream<List<ShippingAddress>> getDefaultShippingAddress() {
     return _service.collectionsStream(
-      collectionPath: ApiPath.userAddresses(uId),
+      collectionPath: FirestoreApiPath.userAddresses(uId),
       deMapping: (data, documentId) =>
           ShippingAddress.fromMap(data!, documentId),
       queryPeocess: (query) => query.where('isDefault', isEqualTo: true),
@@ -77,15 +77,16 @@ class FirestoreRepo implements Repository {
   ///Data setters *******************************
   @override
   Future<void> setUserData(UserData userData) => _service.setData(
-      documentPath: ApiPath.userDoc(userData.uId), data: userData.toMap());
+      documentPath: FirestoreApiPath.userDoc(userData.uId),
+      data: userData.toMap());
 
   @override
   Future<void> addToCart(UserProduct userProduct) => _service.setData(
-      documentPath: ApiPath.cartProductCollection(uId, userProduct.id),
+      documentPath: FirestoreApiPath.cartProductCollection(uId, userProduct.id),
       data: userProduct.toMap());
 
   @override
   Future<void> saveAddress(ShippingAddress usersAddress) => _service.setData(
-      documentPath: ApiPath.specificAddress(uId, usersAddress.id),
+      documentPath: FirestoreApiPath.specificAddress(uId, usersAddress.id),
       data: usersAddress.toMap());
 }
