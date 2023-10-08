@@ -9,6 +9,7 @@ import 'package:e_commerce_app/view/Pages/ShippingAddresses/view_addresses_page.
 import 'package:e_commerce_app/view/Pages/auth_page.dart';
 import 'package:e_commerce_app/view/Pages/bottom_navbar.dart';
 import 'package:e_commerce_app/view/Pages/checkout_page.dart';
+import 'package:e_commerce_app/view/Pages/credit_card_page.dart';
 import 'package:e_commerce_app/view/Pages/product_details.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -41,16 +42,24 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
               ),
           settings: settings);
     case AppRoutes.chekoutPage:
-      // final database = settings.arguments as Repository;
+      final totalPrice = settings.arguments as int;
       return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-                create: (context) => UserPrefCubit(
-                    repository: FirestoreRepo(LandingPage.user!.uid)),
-                child: CheckoutPage(),
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => UserPrefCubit(
+                        repository: FirestoreRepo(LandingPage.user!.uid)),
+                  ),
+                  BlocProvider(
+                    create: (context) => CartCubit(
+                        cartRepository: FirestoreRepo(LandingPage.user!.uid)),
+                  ),
+                ],
+                child: CheckoutPage(
+                  totalPrice: totalPrice,
+                ),
               ));
     case AppRoutes.addAddressPage:
-      // final args = settings.arguments as AddShippingAddressArgs;
-      // final database = args.database;
       final shippingAddress = settings.arguments as ShippingAddress?;
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -61,12 +70,22 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
                 ),
               ));
     case AppRoutes.viewAddressesPage:
+      final sharedValue = settings.arguments as int;
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) => UserPrefCubit(
                     repository: FirestoreRepo(LandingPage.user!.uid)),
-                child: ViewAddressesPage(),
+                child: ViewAddressesPage(
+                  sharedValue: sharedValue,
+                ),
               ));
+    case AppRoutes.creditCardPage:
+      final totalPrice = settings.arguments as int;
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+              create: (context) => UserPrefCubit(
+                  repository: FirestoreRepo(LandingPage.user!.uid)),
+              child: CreditCardPage(paymentPrice: totalPrice)));
     case AppRoutes.landingPageRoute:
     default:
       return MaterialPageRoute(

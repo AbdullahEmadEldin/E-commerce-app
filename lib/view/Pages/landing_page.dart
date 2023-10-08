@@ -4,7 +4,6 @@ import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce_app/Controllers/auth_controller.dart';
 import 'package:e_commerce_app/data_layer/Services/firebase_auth.dart';

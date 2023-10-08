@@ -21,7 +21,6 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CartCubit>(context).getCartProducts();
-    //final databaseProvider = Provider.of<Repository>(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -31,7 +30,7 @@ class _CartPageState extends State<CartPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My Bag',
+                  'My Cart',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
@@ -87,6 +86,7 @@ class _CartPageState extends State<CartPage> {
               ontap: () {
                 Navigator.of(context, rootNavigator: true).pushNamed(
                   AppRoutes.chekoutPage,
+                  arguments: totalPrice,
                 );
               },
               hasCircularBorder: true,
