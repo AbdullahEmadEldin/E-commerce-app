@@ -80,7 +80,12 @@ class HomePage extends StatelessWidget {
                     } else if (state is ProductsFailure) {
                       return Center(child: Text('Error: ${state.errorMsg}'));
                     } else {
-                      return const Text('Some fucking shit');
+                      BlocProvider.of<ProductCubit>(context)
+                          .retrieveAllProducts();
+
+                      return Center(
+                          child:
+                              Text('Some fucking state: ${state.toString()}'));
                     }
                   },
                 ),
@@ -106,8 +111,12 @@ class HomePage extends StatelessWidget {
                                   isNew: true,
                                 ),
                               ));
+                    } else if (state is ProductsFailure) {
+                      return Center(child: Text('Error: ${state.errorMsg}'));
                     } else {
-                      return const Center(child: Text('No data available'));
+                      return Center(
+                          child:
+                              Text('Some fucking state: ${state.toString()}'));
                     }
                   },
                 ),

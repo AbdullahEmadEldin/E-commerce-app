@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/user_product.dart';
-import 'package:e_commerce_app/view/Widgets/bag_product_tile.dart';
+import 'package:e_commerce_app/view/Widgets/cart_product_tile.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
 import 'package:e_commerce_app/view/Widgets/two_separateditems_row.dart';
 import 'package:flutter/material.dart';
@@ -39,24 +39,24 @@ class _CartPageState extends State<CartPage> {
             ),
             const SizedBox(height: 16),
             BlocBuilder<CartCubit, CartState>(builder: (context, state) {
-              if (state is SuccessCartProducts) {
+              if (state is LoadingCartProducts) {
+                return const CircularProgressIndicator.adaptive();
+              } else if (state is SuccessCartProducts) {
                 cartProducts = state.cartProducts;
-                if (state is LoadingCartProducts) {
-                  return const CircularProgressIndicator.adaptive();
-                } else if (cartProducts.isEmpty) {
+                if (cartProducts.isEmpty) {
                   return const Center(child: Text('No products added to cart'));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      primary: true,
+                      shrinkWrap: true,
+                      itemCount: cartProducts.length,
+                      itemBuilder: (_, index) {
+                        return CartProductTile(product: cartProducts[index]);
+                      },
+                    ),
+                  );
                 }
-
-                return Expanded(
-                  child: ListView.builder(
-                    primary: true,
-                    shrinkWrap: true,
-                    itemCount: cartProducts.length,
-                    itemBuilder: (_, index) {
-                      return BagProductTile(product: cartProducts[index]);
-                    },
-                  ),
-                );
               } else if (state is FailureCartProducts) {
                 return Center(
                     child: Text('Error Fetching products: ${state.errorMsg}'));
@@ -72,7 +72,10 @@ class _CartPageState extends State<CartPage> {
                 if (state is SuccessCartProducts) {
                   totalPrice = 0;
                   for (var product in state.cartProducts) {
-                    totalPrice += product.price;
+                    int price = 0;
+                    price = product.price -
+                        ((product.price * (product.discount ?? 0)) ~/ 100);
+                    totalPrice += (price) * product.quantity;
                   }
                   print('totalpriceee: $totalPrice');
                 }

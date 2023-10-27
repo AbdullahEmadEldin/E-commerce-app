@@ -61,8 +61,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                         });
                       },
                     )),
-                    Spacer(),
-                    FavouriteButton(),
+                    const Spacer(),
+                    // FavouriteButton(
+                    //   isFavourite: widget.product.isFavourite,
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -103,8 +105,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                 const SizedBox(height: 16),
                 MainButton(
                   text: 'Add to cart',
-                  ontap: () =>
-                      cartCubit.addToCart(widget.product, dropdownValue),
+                  ontap: () {
+                    cartCubit.addToCart(
+                        product: widget.product, dropdownValue: dropdownValue);
+                  },
                   hasCircularBorder: true,
                 )
               ],

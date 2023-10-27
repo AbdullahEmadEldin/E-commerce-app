@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data_layer/repository/firestore_repo.dart';
-
 class AddAddressPage extends StatefulWidget {
   final ShippingAddress? shippingAddress;
   const AddAddressPage({Key? key, this.shippingAddress}) : super(key: key);
@@ -58,7 +56,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
   @override
   Widget build(BuildContext context) {
     final saveAddressCubit = BlocProvider.of<UserPrefCubit>(context);
-    // final databaseProvider = Provider.of<Repository>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -182,30 +179,4 @@ class _AddAddressPageState extends State<AddAddressPage> {
       ),
     );
   }
-
-  // Future<void> _saveAddress(Repository database) async {
-  //   try {
-  //     if (_formKey.currentState!.validate()) {
-  //       final address = ShippingAddress(
-  //           id: shippingAddress != null
-  //               ? shippingAddress!.id
-  //               : kIdFromDartGenerator(),
-  //           name: _fullNameController.text.trim(),
-  //           address: _addressController.text.trim(),
-  //           city: _cityController.text.trim(),
-  //           state: _stateController.text.trim(),
-  //           postalCode: _zipcodeController.text.trim(),
-  //           country: _countryController.text.trim());
-  //       await database.saveAddress(address);
-  //       if (!mounted) return;
-  //       Navigator.pop(context);
-  //     }
-  //   } catch (e) {
-  //     MainDialog(
-  //             context: context,
-  //             title: 'Error saving address',
-  //             content: e.toString())
-  //         .showAlertDialog();
-  //   }
-  // }
 }

@@ -1,8 +1,13 @@
+import 'package:bloc/bloc.dart';
+import 'package:e_commerce_app/Utilities/routes.dart';
+import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
 import 'package:e_commerce_app/view/Pages/cart_page.dart';
+import 'package:e_commerce_app/view/Pages/favourites_page.dart';
 import 'package:e_commerce_app/view/Pages/home_page.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -18,7 +23,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
   ///the buildScreens list and navBarItems list must have the same num of items
   ///and in the desired order because they are linked together
   List<Widget> _buildScreens() {
-    return [HomePage(), Container(), CartPage(), Container(), ProfilePage()];
+    return [
+      HomePage(),
+      Container(),
+      CartPage(),
+      FavouritesPage(),
+      ProfilePage()
+    ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

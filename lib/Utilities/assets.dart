@@ -8,4 +8,5 @@ class AppAssets {
       'https://logowik.com/content/uploads/images/fedex-wordmark7612.logowik.com.webp';
   static String dhlLogo =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtZQBHTYu81DA9cr5HhqfHq3cna66ODIlohW1TLfZ_Qw&s';
+  static String profilePic = 'assets/images/Anonymous-Profile-pic.jpg';
 }
