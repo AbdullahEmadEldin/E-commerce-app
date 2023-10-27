@@ -1,5 +1,3 @@
-import 'package:e_commerce_app/Utilities/assets.dart';
-
 class Product {
   final String productID;
   final String title;
@@ -7,7 +5,9 @@ class Product {
   final int? discount;
   final String imgUrl;
   final String category;
+  bool isFavourite;
   final int? rate;
+
   Product(
       {required this.productID,
       required this.title,
@@ -15,6 +15,7 @@ class Product {
       this.category = 'Other',
       this.rate,
       this.discount,
+      this.isFavourite = false,
       required this.imgUrl});
 
   ///both functions need more declration
@@ -26,7 +27,8 @@ class Product {
       'category': category,
       'rate': rate,
       'discount': discount,
-      'imgUrl': imgUrl
+      'imgUrl': imgUrl,
+      'isFavourite': isFavourite,
     };
   }
 
@@ -39,48 +41,28 @@ class Product {
       rate: map['rate'] as int,
       discount: map['discount'] as int,
       imgUrl: map['imgUrl'] as String,
+      isFavourite: map['isFavourite'] as bool,
+    );
+  }
+  Product compywith({
+    String? productID,
+    String? title,
+    int? price,
+    int? discount,
+    String? imgUrl,
+    String? category,
+    bool? isFavourite,
+    int? rate,
+  }) {
+    return Product(
+      productID: productID ?? this.productID,
+      title: title ?? this.title,
+      price: price ?? this.price,
+      imgUrl: imgUrl ?? this.imgUrl,
+      discount: discount ?? this.discount,
+      isFavourite: isFavourite ?? this.isFavourite,
+      rate: rate ?? this.rate,
+      category: category ?? this.category,
     );
   }
 }
-
-///mock up of produtc's list
-List<Product> dummyProducts = [
-  Product(
-      productID: '1',
-      title: 'T-shirt',
-      price: 300,
-      category: 'Men',
-      imgUrl: AppAssets.tempProduct1,
-      discount: 20),
-  Product(
-      productID: '1',
-      title: 'T-shirt',
-      price: 300,
-      category: 'Men',
-      imgUrl: AppAssets.tempProduct1),
-  Product(
-      productID: '1',
-      title: 'T-shirt',
-      price: 300,
-      category: 'Men',
-      imgUrl: AppAssets.tempProduct1,
-      discount: 30),
-  Product(
-      productID: '1',
-      title: 'T-shirt',
-      price: 300,
-      category: 'Men',
-      imgUrl: AppAssets.tempProduct1),
-  Product(
-      productID: '1',
-      title: 'T-shirt',
-      price: 300,
-      category: 'Men',
-      imgUrl: AppAssets.tempProduct1),
-  Product(
-      productID: '1',
-      title: 'T-shirt',
-      price: 300,
-      category: 'Men',
-      imgUrl: AppAssets.tempProduct1),
-];
