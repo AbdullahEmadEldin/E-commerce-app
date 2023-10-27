@@ -10,13 +10,18 @@ import '../Models/user.dart';
 abstract class Repository {
   Stream<List<Product>> salesProductStream();
   Stream<List<Product>> newProductStream();
-  Stream<List<UserProduct>> myBag();
+  Stream<List<UserProduct>> myCart();
   Stream<List<DeliveryOption>> deliveryOptions();
   Stream<List<ShippingAddress>> getShippingAddresses();
   Stream<List<ShippingAddress>> getDefaultShippingAddress();
+  Stream<List<Product>> favouriteProducts();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
+  Future<void> addProduct(Product product);
   Future<void> saveAddress(ShippingAddress usersAddress);
+  Future<void> deleteCartProduct({required UserProduct userProduct});
+  Future<void> deleteProducts(Product product);
+  Future<void> deleteAddress(ShippingAddress address);
 }
 
 ///this calss' methods will control and call methods from firestore srvices
@@ -47,7 +52,15 @@ class FirestoreRepo implements Repository {
   }
 
   @override
-  Stream<List<UserProduct>> myBag() => _service.collectionsStream(
+  Stream<List<Product>> favouriteProducts() {
+    return _service.collectionsStream(
+        collectionPath: 'users/$uId/favourites/',
+        deMapping: (mapData, docId) => Product.formMap(mapData!, docId),
+        queryPeocess: (query) => query.where('isFavourite', isEqualTo: true));
+  }
+
+  @override
+  Stream<List<UserProduct>> myCart() => _service.collectionsStream(
       collectionPath: FirestoreApiPath.cartCollection(uId),
       deMapping: ((data, documentId) =>
           UserProduct.fromMap(data!, documentId)));
@@ -86,7 +99,34 @@ class FirestoreRepo implements Repository {
       data: userProduct.toMap());
 
   @override
+  Future<void> addProduct(Product product) => _service.setData(
+      documentPath:
+          FirestoreApiPath.favouriteCollection(uId, product.productID),
+      data: product.toMap());
+
+  @override
   Future<void> saveAddress(ShippingAddress usersAddress) => _service.setData(
       documentPath: FirestoreApiPath.specificAddress(uId, usersAddress.id),
       data: usersAddress.toMap());
+
+  ///Data deleters **********************************
+  @override
+  Future<void> deleteCartProduct({required UserProduct userProduct}) async {
+    _service.deleteData(
+        documentPath:
+            FirestoreApiPath.cartProductCollection(uId, userProduct.id));
+  }
+
+  @override
+  Future<void> deleteProducts(Product product) async {
+    _service.deleteData(
+        documentPath:
+            FirestoreApiPath.favouriteCollection(uId, product.productID));
+  }
+
+  @override
+  Future<void> deleteAddress(ShippingAddress address) async {
+    _service.deleteData(
+        documentPath: FirestoreApiPath.specificAddress(uId, address.id));
+  }
 }
