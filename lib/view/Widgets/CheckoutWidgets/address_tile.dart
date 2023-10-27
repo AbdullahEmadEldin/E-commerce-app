@@ -58,24 +58,43 @@ class _AddressTileState extends State<AddressTile> {
     );
   }
 
-  InkWell _editAddress(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          widget.address.isDefault
-              ? sharedValue = widget.address.defaultIndex
-              : sharedValue;
-          widget.inViewPage
-              ? Navigator.of(context).pushNamed(AppRoutes.addAddressPage,
-                  arguments: widget.address)
-              : Navigator.of(context).pushNamed(AppRoutes.viewAddressesPage,
+  Widget _editAddress(BuildContext context) {
+    return widget.inViewPage
+        ? PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'Edit') {
+                Navigator.of(context).pushNamed(AppRoutes.addAddressPage,
+                    arguments: widget.address);
+              } else if (value == 'Delete') {
+                BlocProvider.of<UserPrefCubit>(context)
+                    .deleteAddress(widget.address);
+              }
+            },
+            itemBuilder: (context) => [
+                  const PopupMenuItem<String>(
+                    value: 'Edit',
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Delete',
+                    child: Text('Delete'),
+                  ),
+                ])
+        : InkWell(
+            onTap: () {
+              widget.address.isDefault
+                  ? sharedValue = widget.address.defaultIndex
+                  : sharedValue;
+              Navigator.of(context).pushNamed(AppRoutes.viewAddressesPage,
                   arguments: sharedValue);
-        },
-        child: Text(
-          widget.inViewPage ? 'Edit' : 'Change',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Colors.red),
-        ));
+            },
+            child: Text(
+              'Change',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Colors.red),
+            ));
   }
 }
