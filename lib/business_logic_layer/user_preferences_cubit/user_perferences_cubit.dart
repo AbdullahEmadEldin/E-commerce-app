@@ -63,6 +63,14 @@ class UserPrefCubit extends Cubit<UserPrefState> {
     }
   }
 
+  Future<void> deleteAddress(ShippingAddress address) async {
+    try {
+      repository.deleteAddress(address);
+    } catch (e) {
+      print('Error on deleting address::: ${e.toString()}');
+    }
+  }
+
   Future<void> getDeliveryOptions() async {
     emit(DelvieryOptionsLoading());
     repository.deliveryOptions().first.then((delvieryOptions) {
