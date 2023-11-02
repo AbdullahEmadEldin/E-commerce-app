@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:e_commerce_app/data_layer/Services/stripe_payment/stripe_keys.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-///we will singleton design pattern in this service
+///we will use singleton design pattern in this service
 abstract class PaymentService {
   static Future<void> makePayment(int amount, String currency) async {
     String clientSecret =
@@ -16,8 +16,7 @@ abstract class PaymentService {
                 PaymentMethodData(billingDetails: BillingDetails())));
   }
 
-  ///First step in payment process: this method will send post request to Stripe to get payment intent
-  ///payment intent is payment request
+  ///this method aim to get clientSecret which will be used to make paymentIntent
   static Future<String> _getClientSecret(String amount, String currency) async {
     Dio dio = Dio();
     var response = await dio.post(
@@ -36,6 +35,8 @@ abstract class PaymentService {
     return response.data['client_secret'];
   }
 
+  ///First step in payment process: this method will send post request to Stripe to get payment intent
+  ///payment intent is payment request but you should get clientSecret first
   static Future<void> _initPaymentSheet(String clientSecret) async {
     await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(

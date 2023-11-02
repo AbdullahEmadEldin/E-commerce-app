@@ -1,9 +1,8 @@
-import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
-import 'package:e_commerce_app/view/Widgets/dialog.dart';
-import 'package:e_commerce_app/view/Widgets/main_button.dart';
+import 'package:e_commerce_app/Utilities/assets.dart';
+import 'package:e_commerce_app/view/Widgets/paymentwidgets/creditcard_info.dart';
+import 'package:e_commerce_app/view/Widgets/paymentwidgets/payment_option_tile.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 
 class CreditCardPage extends StatefulWidget {
   final int paymentPrice;
@@ -14,66 +13,45 @@ class CreditCardPage extends StatefulWidget {
 }
 
 class _CreditCardPageState extends State<CreditCardPage> {
+  int isActiveIndex = 0;
+  List<String> options = [AppAssets.cardImage, AppAssets.paypalLogo];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credit Card'),
+        title: const Text('Payment Details'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CardFormField(
-                  controller: CardFormEditController(),
-                  style: CardFormStyle(
-                      textColor: Colors.black,
-                      cursorColor: Colors.red,
-                      placeholderColor: Colors.black,
-                      borderRadius: 2,
-                      borderWidth: 1),
-                ),
+              SizedBox(height: 85, child: _paymentOptionList()),
+              CreditcardInfo(
+                paymentPrice: widget.paymentPrice,
               ),
-              BlocListener<UserPrefCubit, UserPrefState>(
-                listener: (context, state) {
-                  bool paymentSuccess = false;
-                  bool paymentFailure = false;
-                  String errMsg = '';
-                  if (state is PaymentLoading) {
-                  } else if (state is PaymentSuccess) {
-                    paymentSuccess = true;
-                  } else if (state is PaymentFailure) {
-                    paymentFailure = true;
-                    errMsg = state.errorMsg;
-                  }
-                  paymentSuccess
-                      ? MainDialog(
-                          context: context,
-                          title: ' Payment process',
-                          content: 'Payment done successfully',
-                        ).showAlertDialog()
-                      : const SizedBox();
-                  paymentFailure
-                      ? MainDialog(
-                          context: context,
-                          title: ' Payment process Error',
-                          content: 'Error: $errMsg',
-                        ).showAlertDialog()
-                      : const SizedBox();
-                },
-                child: MainButton(
-                    text: 'Pay',
-                    ontap: () {
-                      BlocProvider.of<UserPrefCubit>(context)
-                          .makePayment(widget.paymentPrice, 'USD');
-                    }),
-              )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  ListView _paymentOptionList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: options.length,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+        child: GestureDetector(
+          onTap: () {
+            isActiveIndex = index;
+            setState(() {});
+          },
+          child: PaymentOptionTile(
+              isActive: isActiveIndex == index, image: options[index]),
         ),
       ),
     );
