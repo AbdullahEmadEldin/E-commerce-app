@@ -10,9 +10,14 @@ final class ProductsLoading extends ProductState {}
 final class SuccessfullyProductsLoaded extends ProductState {
   final List<Product> saleProducts;
   final List<Product> newProducts;
-
-  SuccessfullyProductsLoaded(
-      {required this.saleProducts, required this.newProducts});
+  final List<Product> womenProducts;
+  final List<Product> menProducts;
+  SuccessfullyProductsLoaded({
+    required this.saleProducts,
+    required this.newProducts,
+    required this.womenProducts,
+    required this.menProducts,
+  });
 }
 
 final class ProductsFailure extends ProductState {

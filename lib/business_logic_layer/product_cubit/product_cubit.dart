@@ -12,13 +12,25 @@ class ProductCubit extends Cubit<ProductState> {
   final Repository productsRepositroy;
   List<Product> saleProducts = [];
   List<Product> newProducts = [];
+  List<Product> womenProducts = [];
+  List<Product> menProducts = [];
   StreamSubscription<List<Product>>? saleStreamSubScription;
   StreamSubscription<List<Product>>? newStreamSubScription;
   StreamSubscription<List<Product>>? favStreamSubScription;
+  StreamSubscription<List<Product>>? womenProductSubscription;
+  StreamSubscription<List<Product>>? menProductSubscription;
 
   ProductCubit({required this.productsRepositroy}) : super(ProductsLoading());
 
   void retrieveAllProducts() async {
+    womenProductSubscription =
+        productsRepositroy.getWomenProducts().listen((womenProducts) {
+      this.womenProducts = womenProducts;
+    });
+    menProductSubscription =
+        productsRepositroy.getMenProducts().listen((menProducts) {
+      this.menProducts = menProducts;
+    });
     saleStreamSubScription =
         productsRepositroy.salesProductStream().listen((saleProducts) {
       this.saleProducts = saleProducts;
@@ -27,9 +39,11 @@ class ProductCubit extends Cubit<ProductState> {
         productsRepositroy.newProductStream().listen((newProducts) {
       this.newProducts = newProducts;
       emit(SuccessfullyProductsLoaded(
-          saleProducts: saleProducts, newProducts: newProducts));
+          saleProducts: saleProducts,
+          newProducts: newProducts,
+          womenProducts: womenProducts,
+          menProducts: menProducts));
     }, onError: (error) {
-      print('error in home page products ${error.toString()}');
       emit(ProductsFailure(
           errorMsg: 'error in home page products: ${error.toString()}'));
     });
@@ -39,7 +53,6 @@ class ProductCubit extends Cubit<ProductState> {
     try {
       productsRepositroy.addProduct(product);
       emit(FavProductAddedSuccessfully());
-      print('neeew a7aaa fav ${product.isFavourite}');
     } catch (e) {
       emit(FavProductAddFailure(errMsg: e.toString()));
     }
@@ -49,10 +62,8 @@ class ProductCubit extends Cubit<ProductState> {
     emit(FavProductsLoading());
     favStreamSubScription =
         productsRepositroy.favouriteProducts().listen((favourites) {
-      print('hellllllllllo::::${favourites.isEmpty}');
       emit(FavProductsFetched(fav: favourites));
     }, onError: (error) {
-      print('error in home page products ${error.toString()}');
       emit(FavProductsFailure(
           errMsg: 'fetching fav products error: ${error.toString()}'));
     });
