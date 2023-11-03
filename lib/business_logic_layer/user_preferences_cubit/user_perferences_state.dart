@@ -67,3 +67,15 @@ final class PaymentFailure extends UserPrefState {
 
   PaymentFailure({required this.errorMsg});
 }
+
+///User data fetching states
+final class UserDataSucessfull extends UserPrefState {
+  final UserData user;
+
+  UserDataSucessfull({required this.user});
+}
+
+final class UserDataFailure extends UserPrefState {
+  final String errorMsg;
+  UserDataFailure({required this.errorMsg});
+}

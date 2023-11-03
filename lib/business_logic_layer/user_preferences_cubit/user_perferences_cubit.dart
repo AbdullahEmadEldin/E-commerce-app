@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/data_layer/Models/address_model.dart';
 import 'package:e_commerce_app/data_layer/Models/delivery_option.dart';
+import 'package:e_commerce_app/data_layer/Models/user.dart';
 import 'package:e_commerce_app/data_layer/Services/stripe_payment/payment_service.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:meta/meta.dart';
 
 part 'user_perferences_state.dart';
@@ -26,7 +28,6 @@ class UserPrefCubit extends Cubit<UserPrefState> {
         repository.getShippingAddresses().listen((shippingAddresses) {
       Future.delayed(Duration.zero, () async {
         address = shippingAddresses;
-        print('address list from cubit:===> ${address.first.address}');
       });
 
       emit(ShippingAddressesSucess(shippingAddress: shippingAddresses));
@@ -34,9 +35,7 @@ class UserPrefCubit extends Cubit<UserPrefState> {
       print('all addressss failure : ${error.toString()}');
       emit(ShippingAddressesFailure(errorMsg: error.toString()));
     });
-    Future.delayed(const Duration(milliseconds: 200), () async {
-      print('out of the future inside the CUBIT:::?   ${address.isEmpty}');
-    });
+    Future.delayed(const Duration(milliseconds: 200));
     return address;
   }
 
@@ -89,8 +88,23 @@ class UserPrefCubit extends Cubit<UserPrefState> {
       await PaymentService.makePayment(amount, currency);
       emit(PaymentSuccess());
     } catch (e) {
-      print('paymeeeent erorrrr:  ${e.toString()}');
-      emit(PaymentFailure(errorMsg: e.toString()));
+      if (e is StripeException) {
+        print('paymeeeent erorrrr:  ${StripeException}');
+        emit(PaymentFailure(errorMsg: e.toString()));
+      } else {
+        print('cubit error on payment process ${e.toString()}');
+      }
+    }
+  }
+
+  Future<void> getUserData() async {
+    try {
+      repository.getUserData().then((value) {
+        emit(UserDataSucessfull(user: value));
+      });
+    } catch (e) {
+      print('Erorr fetching Uesr dataa :::: ${e.toString()}');
+      emit(UserDataFailure(errorMsg: e.toString()));
     }
   }
 
