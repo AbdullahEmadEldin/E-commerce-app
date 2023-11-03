@@ -5,6 +5,7 @@ import 'package:e_commerce_app/view/Pages/cart_page.dart';
 import 'package:e_commerce_app/view/Pages/favourites_page.dart';
 import 'package:e_commerce_app/view/Pages/home_page.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
+import 'package:e_commerce_app/view/Pages/shop_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   List<Widget> _buildScreens() {
     return [
       HomePage(),
-      Container(),
+      ShopPage(),
       CartPage(),
       FavouritesPage(),
       ProfilePage()
