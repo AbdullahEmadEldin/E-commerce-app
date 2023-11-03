@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ViewAddressesPage extends StatefulWidget {
-  int sharedValue;
-
-  ViewAddressesPage({Key? key, required this.sharedValue}) : super(key: key);
+  ViewAddressesPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ViewAddressesPage> createState() => _ViewAddressesPageState();
@@ -16,40 +16,18 @@ class ViewAddressesPage extends StatefulWidget {
 
 class _ViewAddressesPageState extends State<ViewAddressesPage> {
   int selectedIndex = -1;
-
+  int sharedValue = -1;
   bool isDefault = false;
   List<ShippingAddress> defaultAddress = [];
-
-  Future<void> _asyncTest() async {
-    Future.delayed(const Duration(milliseconds: 200), () async {
-      defaultAddress = BlocProvider.of<UserPrefCubit>(context).address;
-      print('local addresses is empty ????  ${defaultAddress.isEmpty}');
-      for (var address in defaultAddress) {
-        if (address.isDefault) {
-          selectedIndex = address.defaultIndex;
-
-          print('selectedIndex is setted successfully == $selectedIndex');
-        }
-      }
-    });
-  }
 
   @override
   void initState() {
     BlocProvider.of<UserPrefCubit>(context).getAllAddress();
-    Future.delayed(const Duration(milliseconds: 200), () async {
-      await _asyncTest();
-      print('future delayed &&& ${defaultAddress.isEmpty}');
-    });
-    print('INIT state after the future');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('===========');
-    print(widget.sharedValue);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shipping Addresses'),
@@ -67,6 +45,15 @@ class _ViewAddressesPageState extends State<ViewAddressesPage> {
                 child: Text('You Haven\'t Set your address yet'));
           }
           final addresses = state.shippingAddress;
+          for (var address in addresses) {
+            if (address.isDefault) {
+              selectedIndex = address.defaultIndex;
+              sharedValue = selectedIndex;
+              print(
+                  'selectedIndex is setted successfully == $selectedIndex***');
+            }
+            print('WTFFFFFFFFFFFFFFFFFF');
+          }
           return _addressesListView(addresses);
         } else if (state is ShippingAddressesFailure) {
           return Center(child: Text('Error: ${state.errorMsg}'));
@@ -99,9 +86,9 @@ class _ViewAddressesPageState extends State<ViewAddressesPage> {
     return RadioListTile(
       title: const Text('Default Shipping address'),
       value: index,
-      groupValue: widget.sharedValue,
+      groupValue: sharedValue,
       onChanged: (newValue) async {
-        widget.sharedValue = newValue;
+        sharedValue = newValue;
         print(
             'first value of selected index::: $selectedIndex,data base index::  ${addresses[index].defaultIndex}');
         if (selectedIndex != -1) {
