@@ -7,9 +7,6 @@ import 'package:e_commerce_app/data_layer/Models/product.dart';
 import 'package:e_commerce_app/view/Widgets/product_tile_home.dart';
 
 class HomePage extends StatelessWidget {
-  late List<Product> saleProducts;
-  late List<Product> newProducts;
-
   HomePage({super.key});
 
   @override
@@ -58,69 +55,16 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 8),
               SizedBox(
                 height: 300,
-                child: BlocBuilder<ProductCubit, ProductState>(
-                  builder: (context, state) {
-                    if (state is ProductsLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is SuccessfullyProductsLoaded) {
-                      saleProducts = state.saleProducts;
-                      if (saleProducts.isEmpty) {
-                        return const Center(child: Text('No Sale Products'));
-                      }
-                      return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: saleProducts.length,
-                          itemBuilder: (_, index) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ProductTileHome(
-                                  product: saleProducts[index],
-                                  isNew: false,
-                                ),
-                              ));
-                    } else if (state is ProductsFailure) {
-                      return Center(child: Text('Error: ${state.errorMsg}'));
-                    } else {
-                      BlocProvider.of<ProductCubit>(context)
-                          .retrieveAllProducts();
-
-                      return Center(
-                          child:
-                              Text('Some fucking state: ${state.toString()}'));
-                    }
-                  },
-                ),
+                child: _productsBlocBuilder(size,
+                    emptyMsg: 'No sale products', isSaleProducts: true),
               ),
               _buildHeaderOfList(context,
                   title: 'New', description: 'Super New Products!'),
               const SizedBox(height: 8),
               SizedBox(
-                height: 300,
-                child: BlocBuilder<ProductCubit, ProductState>(
-                  builder: (context, state) {
-                    if (state is ProductsLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is SuccessfullyProductsLoaded) {
-                      newProducts = state.newProducts;
-                      return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: newProducts.length,
-                          itemBuilder: (_, index) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ProductTileHome(
-                                  product: newProducts[index],
-                                  isNew: true,
-                                ),
-                              ));
-                    } else if (state is ProductsFailure) {
-                      return Center(child: Text('Error: ${state.errorMsg}'));
-                    } else {
-                      return Center(
-                          child:
-                              Text('Some fucking state: ${state.toString()}'));
-                    }
-                  },
-                ),
-              )
+                  height: 300,
+                  child: _productsBlocBuilder(size,
+                      emptyMsg: 'NO new products', isSaleProducts: false))
             ],
           ),
         ),
@@ -128,10 +72,52 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderOfList(BuildContext context,
-      {required String title,
-      required String description,
-      VoidCallback? onTap}) {
+  BlocBuilder<ProductCubit, ProductState> _productsBlocBuilder(Size size,
+      {required String emptyMsg, required bool isSaleProducts}) {
+    return BlocBuilder<ProductCubit, ProductState>(
+      builder: (context, state) {
+        if (state is ProductsLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is SuccessfullyProductsLoaded) {
+          final List<Product> products;
+          isSaleProducts
+              ? products = state.saleProducts
+              : products = state.newProducts;
+          if (products.isEmpty) {
+            return const Center(child: Text('No Sale Products'));
+          }
+          return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: products.length,
+              itemBuilder: (_, index) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProductTileHome(
+                      product: products[index],
+                      isNew: products[index].discount == 0,
+                      postions: (
+                        favButtonBottomPostion: size.width * 0.15,
+                        favButtonRightPostion: size.width * 0.01,
+                        productDetailsBottom: size.height * 0.00001,
+                        imageHeight: 200
+                      ),
+                    ),
+                  ));
+        } else if (state is ProductsFailure) {
+          return Center(child: Text('Error: ${state.errorMsg}'));
+        } else {
+          BlocProvider.of<ProductCubit>(context).retrieveAllProducts();
+
+          return Center(child: Text('Some fucking state: ${state.toString()}'));
+        }
+      },
+    );
+  }
+
+  Widget _buildHeaderOfList(
+    BuildContext context, {
+    required String title,
+    required String description,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -145,13 +131,6 @@ class HomePage extends StatelessWidget {
                   .headlineMedium!
                   .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
             ),
-            InkWell(
-              onTap: onTap,
-              child: Text(
-                'View All',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            )
           ],
         ),
         Text(
