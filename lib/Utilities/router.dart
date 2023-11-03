@@ -12,6 +12,7 @@ import 'package:e_commerce_app/view/Pages/checkout_page.dart';
 import 'package:e_commerce_app/view/Pages/credit_card_page.dart';
 import 'package:e_commerce_app/view/Pages/product_details.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
+import 'package:e_commerce_app/view/Pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -70,15 +71,15 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
                 ),
               ));
     case AppRoutes.viewAddressesPage:
-      final sharedValue = settings.arguments as int;
+      // final sharedValue = settings.arguments as int?;
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (context) => UserPrefCubit(
                     repository: FirestoreRepo(LandingPage.user!.uid)),
-                child: ViewAddressesPage(
-                  sharedValue: sharedValue,
-                ),
+                child: ViewAddressesPage(),
               ));
+    case AppRoutes.settingsPage:
+      return MaterialPageRoute(builder: (_) => SettingsPage());
     case AppRoutes.creditCardPage:
       final totalPrice = settings.arguments as int;
       return MaterialPageRoute(

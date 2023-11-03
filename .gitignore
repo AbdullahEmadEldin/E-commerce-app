@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-
+lib/data_layer/Services/stripe_payment/stripe_keys.dart
 # IntelliJ related
 *.iml
 *.ipr

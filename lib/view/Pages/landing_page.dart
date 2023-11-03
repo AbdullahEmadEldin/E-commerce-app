@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/business_logic_layer/auth_cubit/auth_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
+import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,6 +43,10 @@ class LandingPage extends StatelessWidget {
               BlocProvider(
                 create: (context) =>
                     CartCubit(cartRepository: FirestoreRepo(user.uid)),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    UserPrefCubit(repository: FirestoreRepo(user.uid)),
               ),
             ],
             child: const BottomNavBar(),

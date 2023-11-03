@@ -7,5 +7,6 @@ class AppRoutes {
   static const String chekoutPage = '/checkOut';
   static const String viewAddressesPage = '/view_addresses';
   static const String addAddressPage = '/view_addresses/add_address';
-  static const String creditCardPage = '/check_out/cresit_card';
+  static const String creditCardPage = '/check_out/credit_card';
+  static const String settingsPage = '/profile/settings';
 }
