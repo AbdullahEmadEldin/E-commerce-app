@@ -10,11 +10,14 @@ import '../Models/user.dart';
 abstract class Repository {
   Stream<List<Product>> salesProductStream();
   Stream<List<Product>> newProductStream();
+  Stream<List<Product>> favouriteProducts();
+  Stream<List<Product>> getWomenProducts();
+  Stream<List<Product>> getMenProducts();
   Stream<List<UserProduct>> myCart();
   Stream<List<DeliveryOption>> deliveryOptions();
   Stream<List<ShippingAddress>> getShippingAddresses();
   Stream<List<ShippingAddress>> getDefaultShippingAddress();
-  Stream<List<Product>> favouriteProducts();
+  Future<UserData> getUserData();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
   Future<void> addProduct(Product product);
@@ -34,6 +37,8 @@ class FirestoreRepo implements Repository {
 
   ///Data streams (getters) *****************************
   //QueryProcess methods
+
+  ///Products getter================
   @override
   Stream<List<Product>> salesProductStream() {
     return _service.collectionsStream(
@@ -66,6 +71,24 @@ class FirestoreRepo implements Repository {
           UserProduct.fromMap(data!, documentId)));
 
   @override
+  Stream<List<Product>> getWomenProducts() {
+    return _service.collectionsStream(
+        collectionPath: FirestoreApiPath.productsCollection(),
+        deMapping: (mapData, docId) => Product.formMap(mapData!, docId),
+        queryPeocess: (query) => query.where('category', isEqualTo: 'Women'));
+  }
+
+  @override
+  Stream<List<Product>> getMenProducts() {
+    return _service.collectionsStream(
+        collectionPath: FirestoreApiPath.productsCollection(),
+        deMapping: (mapData, docId) => Product.formMap(mapData!, docId),
+        queryPeocess: (query) => query.where('category', isEqualTo: 'Men'));
+  }
+
+  /// End of product getters =======================
+
+  @override
   Stream<List<DeliveryOption>> deliveryOptions() => _service.collectionsStream(
       collectionPath: FirestoreApiPath.delivryOptions(),
       deMapping: (data, documentId) =>
@@ -85,6 +108,16 @@ class FirestoreRepo implements Repository {
           ShippingAddress.fromMap(data!, documentId),
       queryPeocess: (query) => query.where('isDefault', isEqualTo: true),
     );
+  }
+
+  @override
+  Future<UserData> getUserData() async {
+    return _service
+        .documentsStream(
+            documentPath: FirestoreApiPath.userDoc(uId),
+            deMapping: ((data, documentID) =>
+                UserData.fromMap(data!, documentID)))
+        .first;
   }
 
   ///Data setters *******************************

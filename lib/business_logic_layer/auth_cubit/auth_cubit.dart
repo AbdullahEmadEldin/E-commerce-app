@@ -15,11 +15,13 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthService authService;
   String email;
   String password;
+  String name;
   AuthFormType authFormType;
   AuthCubit(
       {required this.authService,
       this.email = '',
       this.password = '',
+      this.name = '',
       this.authFormType = AuthFormType.login})
       : super(AuthInitial());
 
@@ -28,15 +30,18 @@ class AuthCubit extends Cubit<AuthState> {
   void copyWith({
     String? email,
     String? password,
+    String? name,
     AuthFormType? authFormType,
   }) {
     this.email = email ?? this.email;
     this.password = password ?? this.password;
+    this.name = name ?? this.name;
     this.authFormType = authFormType ?? this.authFormType;
   }
 
   ///update email and password stands for textControllers
   void updateEmail(String email) => copyWith(email: email);
+  void updateName(String name) => copyWith(name: name);
   void updatePassword(String password) => copyWith(password: password);
 
   void toggleFormType() {
@@ -59,6 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
         await repo.setUserData(UserData(
           uId: user?.uid ?? kIdFromDartGenerator(),
           email: email,
+          name: name,
         ));
       }
       print('Login/Register sucessss');

@@ -92,6 +92,21 @@ class _AuthPageState extends State<AuthPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      authFormType == AuthFormType.register
+                          ? TextFormField(
+                              onEditingComplete: () => FocusScope.of(context)
+                                  .requestFocus(_passwordFocusNode),
+                              validator: (value) => value!.isEmpty
+                                  ? 'Please enter your name'
+                                  : null,
+                              onChanged: authOptions.updateName,
+                              decoration: const InputDecoration(
+                                labelText: 'Name',
+                                hintText: 'Enter your name',
+                              ),
+                            )
+                          : const SizedBox(),
+                      const SizedBox(height: 16),
                       TextFormField(
                         obscureText: true,
                         focusNode: _passwordFocusNode,
