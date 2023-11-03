@@ -4,23 +4,35 @@ import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:e_commerce_app/view/Pages/landing_page.dart';
 import 'package:e_commerce_app/view/Widgets/favourite_button.dart';
+import 'package:e_commerce_app/view/Widgets/product_tile_widgets/badges.dart';
+import 'package:e_commerce_app/view/Widgets/product_tile_widgets/ratingbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductTileHome extends StatelessWidget {
   final Product product;
   final bool isNew;
-  const ProductTileHome({Key? key, required this.product, this.isNew = false})
+  final ({
+    double favButtonBottomPostion,
+    double favButtonRightPostion,
+    double productDetailsBottom,
+    double imageHeight
+  }) postions;
+  const ProductTileHome(
+      {Key? key,
+      required this.product,
+      required this.postions,
+      this.isNew = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (context) => ProductCubit(
           productsRepositroy: FirestoreRepo(LandingPage.user!.uid)),
       child: InkWell(
+        //TODO: what does rootNavigator = true do ??
+        //it make the new page seperated from the context of the bottomNavigationBar
         onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
           AppRoutes.productDetails,
           arguments: product,
@@ -28,40 +40,43 @@ class ProductTileHome extends StatelessWidget {
         child: DecoratedBox(
           decoration: const BoxDecoration(),
           child: Stack(
+            clipBehavior: Clip.none,
             children: [
               Stack(
                 children: [
                   _imgBuilder(),
-                  isNew ? _newBadge() : _discountBadge(),
+                  ProductBadge(
+                    product: product,
+                    isNew: isNew,
+                  ),
                 ],
               ),
               Positioned(
-                  bottom: size.height * 0.1,
-                  right: size.width * 0.01,
+                  bottom: postions.favButtonBottomPostion,
+                  right: postions.favButtonRightPostion,
                   child: FavouriteButton(
                     product: product,
                   )),
               Positioned(
-                bottom: size.height * 0.00001,
+                bottom: postions.productDetailsBottom,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        _ratingBar(),
+                        ProductRatingBar(product: product),
                         const SizedBox(width: 4),
-                        //TODO: this number will be fetched from firestore
                         const Text('(96)', style: TextStyle(color: Colors.grey))
                       ],
                     ),
                     Text(
-                      '${product.category}',
+                      product.category,
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: const Color.fromARGB(255, 117, 117, 117)),
                     ),
                     const SizedBox(height: 4.0),
                     Text(
-                      '${product.title}',
+                      product.title,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -94,58 +109,14 @@ class ProductTileHome extends StatelessWidget {
     );
   }
 
-  RatingBarIndicator _ratingBar() {
-    return RatingBarIndicator(
-      rating: product.rate?.toDouble() ?? 0,
-      itemCount: product.rate ?? 0,
-      itemSize: 25,
-      itemBuilder: (context, rating) =>
-          const Icon(Icons.star, color: Colors.amber),
-    );
-  }
-
   ClipRRect _imgBuilder() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Image.network(
         product.imgUrl,
         fit: BoxFit.cover,
-        height: 200,
+        height: postions.imageHeight,
         width: 220,
-      ),
-    );
-  }
-
-  Widget _discountBadge() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 25,
-        width: 40,
-        decoration: BoxDecoration(
-            color: Colors.red, borderRadius: BorderRadius.circular(20)),
-        child: Center(
-            child: Text(
-          "-${product.discount}%",
-          style: const TextStyle(color: Colors.white),
-        )),
-      ),
-    );
-  }
-
-  Widget _newBadge() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 25,
-        width: 40,
-        decoration: BoxDecoration(
-            color: Colors.black, borderRadius: BorderRadius.circular(20)),
-        child: const Center(
-            child: Text(
-          "New",
-          style: TextStyle(color: Colors.white),
-        )),
       ),
     );
   }

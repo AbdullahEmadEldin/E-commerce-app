@@ -33,14 +33,16 @@ class _FavouriteButtonState extends State<FavouriteButton> {
           });
         },
         child: SizedBox(
-          height: 50,
-          width: 50,
+          height: 45,
+          width: 45,
           child: Material(
             elevation: 4.0,
             borderRadius: BorderRadius.circular(24),
             child: Icon(
-                isFavourite ? Icons.favorite : Icons.favorite_border_rounded,
-                color: Colors.red),
+              isFavourite ? Icons.favorite : Icons.favorite_border_rounded,
+              color: Colors.red,
+              size: 20,
+            ),
           ),
         ),
       ),
