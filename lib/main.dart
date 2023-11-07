@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'firebase_options.dart';
 
 import 'package:e_commerce_app/Utilities/routes.dart';
@@ -12,7 +13,6 @@ import 'package:e_commerce_app/Utilities/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   Stripe.publishableKey = StripeApis.puplishedKey;
   await Stripe.instance.applySettings();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
