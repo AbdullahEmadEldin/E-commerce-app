@@ -16,6 +16,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<UserPrefCubit>(context).getUserData();
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -68,6 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         text: 'Log Out',
                         ontap: () {
                           BlocProvider.of<AuthCubit>(context).logOut();
+                          BlocProvider.of<AuthCubit>(context).googleSignOut();
                         },
                       ),
                     ),
@@ -128,7 +130,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Row _profileInfoDrawer(BuildContext context) {
-    final users = BlocProvider.of<UserPrefCubit>(context).getUserData();
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

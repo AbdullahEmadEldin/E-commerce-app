@@ -83,4 +83,36 @@ class AuthCubit extends Cubit<AuthState> {
       print('logout error: $e');
     }
   }
+
+  Future<void> signInwithGoogle() async {
+    try {
+      final userCredential = await authService.signInWithGoogle();
+      if (userCredential == null) {
+        return;
+      }
+      await repo.setUserData(UserData(
+        uId: userCredential.user?.uid ?? kIdFromDartGenerator(),
+        email: userCredential.user?.email ?? 'email',
+        name: userCredential.user?.displayName ?? 'name',
+      ));
+    } catch (e) {
+      print('erorr on sign in with gooooogle');
+    }
+  }
+
+  Future<void> googleSignOut() async {
+    try {
+      await authService.googleSignOut();
+    } catch (e) {
+      print('Error on sign out with google ${e.toString()}');
+    }
+  }
+
+  Future<void> signInWithFacebook() async {
+    try {
+      await authService.signInWithFacebook();
+    } catch (e) {
+      print('error on sign in with facebook ${e.toString()}');
+    }
+  }
 }

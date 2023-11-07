@@ -11,4 +11,6 @@ class AppAssets {
   static String profilePic = 'assets/images/Anonymous-Profile-pic.jpg';
   static String cardImage = 'assets/images/card.png';
   static String paypalLogo = 'assets/images/paypal.png';
+  static String facebooklogo = 'assets/images/Facebook_Logo_2023.png';
+  static String googleLogo = 'assets/images/Google.svg';
 }

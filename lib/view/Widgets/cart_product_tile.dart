@@ -1,7 +1,5 @@
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/user_product.dart';
-import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
-import 'package:e_commerce_app/view/Pages/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
