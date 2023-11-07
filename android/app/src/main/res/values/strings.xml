@@ -1,0 +1,5 @@
+<resources>
+<string name="app_name">ecommerve_test_app</string>
+    <string name="facebook_app_id">253368927360144</string>
+<string name="facebook_client_token">79178fef3ca9c58a19b59de03c2a3b2e</string>
+</resources>
