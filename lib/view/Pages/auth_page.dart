@@ -1,4 +1,5 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
+import 'package:e_commerce_app/Utilities/assets.dart';
 import 'package:e_commerce_app/business_logic_layer/auth_cubit/auth_cubit.dart';
 import 'package:e_commerce_app/view/Widgets/dialog.dart';
 import 'package:flutter/material.dart';
@@ -64,8 +65,8 @@ class _AuthPageState extends State<AuthPage> {
                 child: Form(
               key: _formKey,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 40,
+                padding: EdgeInsets.symmetric(
+                  vertical: authFormType == AuthFormType.register ? 10 : 25,
                   horizontal: 30,
                 ),
                 child: SingleChildScrollView(
@@ -91,7 +92,9 @@ class _AuthPageState extends State<AuthPage> {
                           hintText: 'Enter your email',
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      authFormType == AuthFormType.register
+                          ? const SizedBox(height: 16)
+                          : const SizedBox(),
                       authFormType == AuthFormType.register
                           ? TextFormField(
                               onEditingComplete: () => FocusScope.of(context)
@@ -153,7 +156,7 @@ class _AuthPageState extends State<AuthPage> {
                                     'Don\'t have an account? Register ')
                                 : const Text('Already have an account? Login'),
                           )),
-                      SizedBox(height: size.height * 0.14),
+                      SizedBox(height: size.height * 0.15),
                       Center(
                           child: authFormType == AuthFormType.login
                               ? const Text('Or Login with')
@@ -162,25 +165,17 @@ class _AuthPageState extends State<AuthPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            height: 80,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.0),
-                              color: Colors.white,
-                            ),
-                            child: Icon(Icons.add),
-                          ),
+                          _loginOption(
+                              logo: AppAssets.facebooklogo,
+                              ontap: () {
+                                authOptions.signInWithFacebook();
+                              }),
                           const SizedBox(width: 16.0),
-                          Container(
-                            height: 80,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.0),
-                              color: Colors.white,
-                            ),
-                            child: Icon(Icons.add),
-                          )
+                          _loginOption(
+                              logo: AppAssets.googleLogo,
+                              ontap: () {
+                                authOptions.signInwithGoogle();
+                              }),
                         ],
                       )
                     ],
@@ -191,6 +186,27 @@ class _AuthPageState extends State<AuthPage> {
           ),
         );
       },
+    );
+  }
+
+  InkWell _loginOption({required String logo, required Function ontap}) {
+    return InkWell(
+      onTap: () {
+        ontap();
+      },
+      child: Container(
+          height: 80,
+          width: 80,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset(
+              logo,
+            ),
+          )),
     );
   }
 }
