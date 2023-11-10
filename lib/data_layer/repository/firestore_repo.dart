@@ -23,6 +23,7 @@ abstract class Repository {
   Future<void> addProduct(Product product);
   Future<void> saveAddress(ShippingAddress usersAddress);
   Future<void> deleteCartProduct({required UserProduct userProduct});
+  Future<void> clearCartAfterOrder();
   Future<void> deleteProducts(Product product);
   Future<void> deleteAddress(ShippingAddress address);
 }
@@ -128,7 +129,7 @@ class FirestoreRepo implements Repository {
 
   @override
   Future<void> addToCart(UserProduct userProduct) => _service.setData(
-      documentPath: FirestoreApiPath.cartProductCollection(uId, userProduct.id),
+      documentPath: FirestoreApiPath.cartProduct(uId, userProduct.id),
       data: userProduct.toMap());
 
   @override
@@ -146,8 +147,13 @@ class FirestoreRepo implements Repository {
   @override
   Future<void> deleteCartProduct({required UserProduct userProduct}) async {
     _service.deleteData(
-        documentPath:
-            FirestoreApiPath.cartProductCollection(uId, userProduct.id));
+        documentPath: FirestoreApiPath.cartProduct(uId, userProduct.id));
+  }
+
+  @override
+  Future<void> clearCartAfterOrder() async {
+    _service.deleteCollection(
+        collectionPath: FirestoreApiPath.cartCollection(uId));
   }
 
   @override

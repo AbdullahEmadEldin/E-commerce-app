@@ -32,6 +32,16 @@ class FirestoreServices {
     await reference.delete();
   }
 
+  Future<void> deleteCollection({required String collectionPath}) async {
+    final CollectionReference reference = _firestore.collection(collectionPath);
+    final QuerySnapshot snapshot = await reference.get();
+    final List<Future<void>> deleteFutures = [];
+    for (DocumentSnapshot doc in snapshot.docs) {
+      deleteFutures.add(doc.reference.delete());
+    }
+    await Future.wait(deleteFutures);
+  }
+
   Stream<T> documentsStream<T>({
     required String documentPath,
 

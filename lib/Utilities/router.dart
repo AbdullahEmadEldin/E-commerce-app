@@ -15,10 +15,8 @@ import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:e_commerce_app/view/Pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 import '../view/Pages/landing_page.dart';
-import 'ArgsModels/add_address_args.dart';
 
 Route<dynamic> routeGenerator(RouteSettings settings) {
   switch (settings.name) {
@@ -83,10 +81,19 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
     case AppRoutes.creditCardPage:
       final totalPrice = settings.arguments as int;
       return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-              create: (context) => UserPrefCubit(
-                  repository: FirestoreRepo(LandingPage.user!.uid)),
-              child: CreditCardPage(paymentPrice: totalPrice)));
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => UserPrefCubit(
+                        repository: FirestoreRepo(LandingPage.user!.uid)),
+                  ),
+                  BlocProvider(
+                    create: (context) => CartCubit(
+                        cartRepository: FirestoreRepo(LandingPage.user!.uid)),
+                  ),
+                ],
+                child: CreditCardPage(paymentPrice: totalPrice),
+              ));
     case AppRoutes.landingPageRoute:
     default:
       return MaterialPageRoute(
