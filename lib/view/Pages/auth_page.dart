@@ -35,7 +35,7 @@ class _AuthPageState extends State<AuthPage> {
         if (state is AuthLoading) {
           isLoading = true;
         } else if (state is SuccessfulAuth) {
-          //TODO: authentication tip:
+          //! authentication tip:
           //when you submit it goes directly to the bottomNavBar without Navigation hooooooow?
           //because the landinPage mediator and have StramBuilder
           // StreamBuilder is a widget that builds itself based on the latest snapshot of interaction with a stream
@@ -189,24 +189,24 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  InkWell _loginOption({required String logo, required Function ontap}) {
-    return InkWell(
-      onTap: () {
-        ontap();
-      },
-      child: Container(
-          height: 80,
-          width: 80,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-            color: Colors.white,
-          ),
+  Widget _loginOption({required String logo, required Function ontap}) {
+    return Container(
+        height: 80,
+        width: 80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          color: Colors.white,
+        ),
+        child: InkWell(
+          onTap: () {
+            ontap();
+          },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Image.asset(
               logo,
             ),
-          )),
-    );
+          ),
+        ));
   }
 }

@@ -4,6 +4,7 @@ import 'package:e_commerce_app/Utilities/enums.dart';
 import 'package:e_commerce_app/data_layer/Models/user.dart';
 import 'package:e_commerce_app/data_layer/Services/firebase_auth.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_state.dart';
@@ -69,9 +70,21 @@ class AuthCubit extends Cubit<AuthState> {
       }
       print('Login/Register sucessss');
       emit(SuccessfulAuth());
-    } catch (e) {
-      print('authentication errorr :${e.toString()}');
-      emit(FailureAuth(errorMsg: e.toString()));
+    } on FirebaseAuthException catch (e) {
+      print('authentication errorr :${e.code}');
+      if (e.code == 'auth/email-already-exists	') {
+        emit(FailureAuth(errorMsg: 'email you entered already exists'));
+      } else if (e.code == 'auth/invalid-email	') {
+        emit(FailureAuth(errorMsg: 'email you entered is invalid'));
+      } else if (e.code == 'user-not-found') {
+        emit(FailureAuth(
+            errorMsg: 'User not found \nPlease create a new email'));
+      } else if (e.code == 'wrong-password') {
+        emit(FailureAuth(errorMsg: 'Wrong password'));
+      } else if (e.code == 'email-already-in-use') {
+        emit(FailureAuth(
+            errorMsg: 'Email you entered is already in use \nPlease Login'));
+      }
     }
   }
 
@@ -96,7 +109,7 @@ class AuthCubit extends Cubit<AuthState> {
         name: userCredential.user?.displayName ?? 'name',
       ));
     } catch (e) {
-      print('erorr on sign in with gooooogle');
+      print('erorr on sign in with gooooogle ${e.toString()}');
     }
   }
 
