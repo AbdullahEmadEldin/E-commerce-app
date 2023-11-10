@@ -12,32 +12,21 @@ final class SuccessfullyProductsLoaded extends ProductState {
   final List<Product> newProducts;
   final List<Product> womenProducts;
   final List<Product> menProducts;
+  final List<Product> favProducts;
+  final List<UserProduct> cartProducts;
   SuccessfullyProductsLoaded({
     required this.saleProducts,
     required this.newProducts,
     required this.womenProducts,
     required this.menProducts,
+    required this.favProducts,
+    required this.cartProducts,
   });
 }
 
 final class ProductsFailure extends ProductState {
   final String? errorMsg;
   ProductsFailure({this.errorMsg});
-}
-
-///Fav products states
-final class FavProductsLoading extends ProductState {}
-
-final class FavProductsFetched extends ProductState {
-  final List<Product> fav;
-
-  FavProductsFetched({required this.fav});
-}
-
-final class FavProductsFailure extends ProductState {
-  final String errMsg;
-
-  FavProductsFailure({required this.errMsg});
 }
 
 final class FavProductAddedSuccessfully extends ProductState {}
