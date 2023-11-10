@@ -67,8 +67,6 @@ class _CartProductTileState extends State<CartProductTile> {
                                       userProduct: widget.product,
                                       quantity: widget.product.quantity - 1);
                             });
-                            print(
-                                "a7aaaaaaaaaaaaaaaaaaaa: ${widget.product.quantity}");
                           },
                           style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),

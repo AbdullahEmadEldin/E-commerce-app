@@ -1,5 +1,5 @@
 import 'package:e_commerce_app/Utilities/routes.dart';
-import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
+import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/user_product.dart';
 import 'package:e_commerce_app/view/Widgets/cart_product_tile.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
@@ -20,7 +20,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<CartCubit>(context).getCartProducts();
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -38,13 +37,14 @@ class _CartPageState extends State<CartPage> {
               ],
             ),
             const SizedBox(height: 16),
-            BlocBuilder<CartCubit, CartState>(builder: (context, state) {
-              if (state is LoadingCartProducts) {
+            BlocBuilder<ProductCubit, ProductState>(builder: (context, state) {
+              if (state is ProductsLoading) {
                 return const CircularProgressIndicator.adaptive();
-              } else if (state is SuccessCartProducts) {
+              } else if (state is SuccessfullyProductsLoaded) {
                 cartProducts = state.cartProducts;
                 if (cartProducts.isEmpty) {
-                  return const Center(child: Text('No products added to cart'));
+                  return const Expanded(
+                      child: Center(child: Text('Cart is empty')));
                 } else {
                   return Expanded(
                     child: ListView.builder(
@@ -57,7 +57,7 @@ class _CartPageState extends State<CartPage> {
                     ),
                   );
                 }
-              } else if (state is FailureCartProducts) {
+              } else if (state is ProductsFailure) {
                 return Center(
                     child: Text('Error Fetching products: ${state.errorMsg}'));
               } else {
@@ -67,9 +67,9 @@ class _CartPageState extends State<CartPage> {
               }
             }),
             const SizedBox(height: 16),
-            BlocBuilder<CartCubit, CartState>(
+            BlocBuilder<ProductCubit, ProductState>(
               builder: (context, state) {
-                if (state is SuccessCartProducts) {
+                if (state is SuccessfullyProductsLoaded) {
                   totalPrice = 0;
                   for (var product in state.cartProducts) {
                     int price = 0;

@@ -1,15 +1,15 @@
-import 'package:bloc/bloc.dart';
-import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/business_logic_layer/product_cubit/product_cubit.dart';
+import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:e_commerce_app/view/Pages/cart_page.dart';
 import 'package:e_commerce_app/view/Pages/favourites_page.dart';
 import 'package:e_commerce_app/view/Pages/home_page.dart';
+import 'package:e_commerce_app/view/Pages/landing_page.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:e_commerce_app/view/Pages/shop_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -33,36 +33,36 @@ class _BottomNavBarState extends State<BottomNavBar> {
     ];
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
+  List<PersistentBottomNavBarItem> _navBarsItems(BuildContext contextt) {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.home),
         title: "Home",
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.cart),
         title: "Shop",
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.bag),
         title: "Bag",
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.heart),
         title: "Favourites",
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.profile_circled),
         title: "Profile",
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.destructiveRed,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];
@@ -75,7 +75,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         context,
         controller: _tabViewController,
         screens: _buildScreens(),
-        items: _navBarsItems(),
+        items: _navBarsItems(context),
         confineInSafeArea: true,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true, // Default is true.

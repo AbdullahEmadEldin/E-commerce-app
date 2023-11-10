@@ -65,7 +65,7 @@ class _ShopPageState extends State<ShopPage> {
             return const Center(child: Text('No Women Products'));
           }
           return GridView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, childAspectRatio: 0.7),
               itemCount: products.length,

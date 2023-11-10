@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
                 child: Text(
-                  'Street Clothes',
+                  'Fancy Clothes',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold, color: Colors.white),
                 ),
@@ -105,8 +105,6 @@ class HomePage extends StatelessWidget {
         } else if (state is ProductsFailure) {
           return Center(child: Text('Error: ${state.errorMsg}'));
         } else {
-          BlocProvider.of<ProductCubit>(context).retrieveAllProducts();
-
           return Center(child: Text('Some fucking state: ${state.toString()}'));
         }
       },
