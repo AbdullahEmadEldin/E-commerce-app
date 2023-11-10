@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
 import 'package:e_commerce_app/view/Widgets/dialog.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
@@ -53,6 +54,8 @@ class _CreditcardInfoState extends State<CreditcardInfo> {
               if (state is PaymentLoading) {
               } else if (state is PaymentSuccess) {
                 paymentSuccess = true;
+                BlocProvider.of<CartCubit>(context)
+                    .clearCartAfterSuccessfulOrder();
               } else if (state is PaymentFailure) {
                 paymentFailure = true;
                 errMsg = state.errorMsg;
@@ -61,7 +64,7 @@ class _CreditcardInfoState extends State<CreditcardInfo> {
                   ? MainDialog(
                       context: context,
                       title: ' Payment process',
-                      content: 'Payment done successfully',
+                      content: 'Successful Payment. Order placed successfully',
                     ).showAlertDialog()
                   : const SizedBox();
               paymentFailure

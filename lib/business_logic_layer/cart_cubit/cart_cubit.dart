@@ -31,20 +31,16 @@ class CartCubit extends Cubit<CartState> {
           imgUrl: product.imgUrl,
           discount: product.discount,
         );
-        print('000000000000000000000000000=====>>>${product.discount}');
         await cartRepository.addToCart(userProduct);
       } else {
         int index = -1;
         for (int i = 0; i < cartProducts.length; i++) {
-          print(
-              'boool:stored productId: ${cartProducts[i].productId}  new one:  ${product.productID}');
           if (cartProducts[i].productId == product.productID) {
             index = i;
           }
           if (index != -1) {
             await cartRepository.addToCart(cartProducts[i]
                 .compywith(quantity: cartProducts[i].quantity + 1));
-            print('second case');
             break;
           } else if (index == -1 && i == cartProducts.length - 1) {
             userProduct = UserProduct(
@@ -58,13 +54,10 @@ class CartCubit extends Cubit<CartState> {
               discount: product.discount,
             );
             await cartRepository.addToCart(userProduct);
-            print('000000000000000000000000000=====>>>${product.discount}');
             print('third case');
           }
         }
       }
-      print('${cartProducts.length}');
-      print('Sucessssssss added to cart');
       emit(SucessAddToCart());
     } catch (e) {
       print('errorrrrrrrrrrrrr add product to cart: ${e.toString()}');
@@ -77,6 +70,14 @@ class CartCubit extends Cubit<CartState> {
       cartRepository.deleteCartProduct(userProduct: product);
     } catch (e) {
       print('error on deleting cart product:: ${e.toString}');
+    }
+  }
+
+  Future<void> clearCartAfterSuccessfulOrder() async {
+    try {
+      await cartRepository.clearCartAfterOrder();
+    } catch (e) {
+      print('error during clear cart ${e.toString()}');
     }
   }
 
