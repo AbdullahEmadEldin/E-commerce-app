@@ -103,13 +103,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                         .labelLarge!
                         .copyWith(color: Colors.black54)),
                 const SizedBox(height: 16),
-                MainButton(
-                  text: 'Add to cart',
-                  ontap: () {
-                    cartCubit.addToCart(
-                        product: widget.product, dropdownValue: dropdownValue);
+                BlocListener<CartCubit, CartState>(
+                  listener: (context, state) {
+                    if (state is SucessAddToCart) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Product addedd successfully',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          backgroundColor: Colors.white,
+                        ),
+                      );
+                    }
                   },
-                  hasCircularBorder: true,
+                  child: MainButton(
+                    text: 'Add to cart',
+                    ontap: () {
+                      cartCubit.addToCart(
+                          product: widget.product,
+                          dropdownValue: dropdownValue);
+                    },
+                    hasCircularBorder: true,
+                  ),
                 )
               ],
             ),
