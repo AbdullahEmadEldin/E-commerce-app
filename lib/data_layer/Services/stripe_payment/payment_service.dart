@@ -5,15 +5,11 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 ///we will use singleton design pattern in this service
 abstract class PaymentService {
   static Future<void> makePayment(int amount, String currency) async {
+    final instance = Stripe.instance;
     String clientSecret =
         await _getClientSecret((amount * 100).toString(), currency);
     await _initPaymentSheet(clientSecret);
-    // await Stripe.instance.presentPaymentSheet();
-    await Stripe.instance.confirmPayment(
-        paymentIntentClientSecret: clientSecret,
-        data: const PaymentMethodParams.card(
-            paymentMethodData:
-                PaymentMethodData(billingDetails: BillingDetails())));
+    await instance.presentPaymentSheet();
   }
 
   ///this method aim to get clientSecret which will be used to make paymentIntent

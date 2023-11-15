@@ -1,9 +1,14 @@
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
 import 'package:e_commerce_app/Utilities/routes.dart';
+import 'package:e_commerce_app/data_layer/Models/address_model.dart';
+import 'package:e_commerce_app/data_layer/Models/user_product.dart';
+import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
+import 'package:e_commerce_app/view/Pages/landing_page.dart';
 import 'package:e_commerce_app/view/Widgets/CheckoutWidgets/add_address_button.dart';
 import 'package:e_commerce_app/view/Widgets/CheckoutWidgets/address_tile.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
+import 'package:e_commerce_app/view/Widgets/paymentwidgets/payment_listener.dart';
 import 'package:e_commerce_app/view/Widgets/two_separateditems_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +22,8 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  List<UserProduct> orderProducts = [];
+  late ShippingAddress defaultAddress;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -71,7 +78,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     if (state.shippingAddress!.isEmpty) {
                       return _emptyDefaultAddress();
                     }
-                    final defaultAddress = state.shippingAddress!.first;
+                    defaultAddress = state.shippingAddress!.first;
 
                     return AddressTile(
                       address: defaultAddress,
@@ -94,18 +101,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
               BlocBuilder<CartCubit, CartState>(
                 builder: (context, state) {
                   if (state is SuccessCartProducts) {
-                    final orderSummary = state.cartProducts;
+                    orderProducts = state.cartProducts;
 
                     return ListView.builder(
                         shrinkWrap: true,
-                        itemCount: orderSummary.length,
+                        itemCount: orderProducts.length,
                         itemBuilder: (_, index) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(orderSummary[index].title),
+                              Text(orderProducts[index].title),
                               Text(
-                                'Size: ${orderSummary[index].size}, Color: ${orderSummary[index].color}',
+                                'Size: ${orderProducts[index].size}, Color: ${orderProducts[index].color}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
@@ -127,12 +134,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
               const SizedBox(height: 8),
               TitleAndValueRow(
                   title: 'Total: ', value: '${widget.totalPrice + 15}\$'),
-              SizedBox(height: size.height * 0.2),
+              SizedBox(height: size.height * 0.25),
               MainButton(
                 text: 'Confirm & Pay',
                 ontap: () {
-                  Navigator.pushNamed(context, AppRoutes.creditCardPage,
-                      arguments: widget.totalPrice);
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => CartCubit(
+                                  cartRepository:
+                                      FirestoreRepo(LandingPage.user!.uid)),
+                            ),
+                            BlocProvider(
+                              create: (context) => UserPrefCubit(
+                                  repository:
+                                      FirestoreRepo(LandingPage.user!.uid)),
+                            ),
+                          ],
+                          child: PaymentListner(
+                            orderProducts: orderProducts,
+                            defaultAddress: defaultAddress,
+                            totalPrice: widget.totalPrice,
+                          ),
+                        );
+                      });
                 },
                 hasCircularBorder: true,
               ),

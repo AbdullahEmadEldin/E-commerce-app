@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:e_commerce_app/Utilities/assets.dart';
 import 'package:flutter/material.dart';
 
 class PaymentOptionTile extends StatelessWidget {
@@ -34,6 +35,38 @@ class PaymentOptionTile extends StatelessWidget {
       child: Image.asset(
         image,
         fit: BoxFit.scaleDown,
+      ),
+    );
+  }
+}
+
+class PaymentOptionList extends StatefulWidget {
+  const PaymentOptionList({Key? key}) : super(key: key);
+
+  @override
+  _PaymentOptionTileState createState() => _PaymentOptionTileState();
+}
+
+class _PaymentOptionTileState extends State<PaymentOptionList> {
+  int isActiveIndex = 0;
+  List<String> options = [AppAssets.cardImage, AppAssets.paypalLogo];
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: options.length,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+        child: GestureDetector(
+          onTap: () {
+            isActiveIndex = index;
+            print(':::: $isActiveIndex');
+            setState(() {});
+          },
+          child: PaymentOptionTile(
+              isActive: isActiveIndex == index, image: options[index]),
+        ),
       ),
     );
   }
