@@ -79,3 +79,18 @@ final class UserDataFailure extends UserPrefState {
   final String errorMsg;
   UserDataFailure({required this.errorMsg});
 }
+
+/// Orders states
+final class OrdersLoading extends UserPrefState {}
+
+final class OrdersSucessful extends UserPrefState {
+  final List<Order> orders;
+
+  OrdersSucessful({required this.orders});
+}
+
+final class OrdersFailure extends UserPrefState {
+  final String errorMsg;
+
+  OrdersFailure({required this.errorMsg});
+}

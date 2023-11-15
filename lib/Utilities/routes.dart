@@ -9,4 +9,6 @@ class AppRoutes {
   static const String addAddressPage = '/view_addresses/add_address';
   static const String creditCardPage = '/check_out/credit_card';
   static const String settingsPage = '/profile/settings';
+  static const String ordersPage = '/profile/Orders';
+  static const String ordersDetailsPage = '/profile/Orders/orderdetails';
 }

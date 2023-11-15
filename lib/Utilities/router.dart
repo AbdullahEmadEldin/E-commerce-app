@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/address_model.dart';
+import 'package:e_commerce_app/data_layer/Models/order.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
 import 'package:e_commerce_app/data_layer/Models/product.dart';
 import 'package:e_commerce_app/Utilities/routes.dart';
@@ -10,6 +11,8 @@ import 'package:e_commerce_app/view/Pages/auth_page.dart';
 import 'package:e_commerce_app/view/Pages/bottom_navbar.dart';
 import 'package:e_commerce_app/view/Pages/checkout_page.dart';
 import 'package:e_commerce_app/view/Pages/credit_card_page.dart';
+import 'package:e_commerce_app/view/Pages/order_details.dart';
+import 'package:e_commerce_app/view/Pages/order_pages.dart';
 import 'package:e_commerce_app/view/Pages/product_details.dart';
 import 'package:e_commerce_app/view/Pages/profile_page.dart';
 import 'package:e_commerce_app/view/Pages/settings_page.dart';
@@ -93,6 +96,22 @@ Route<dynamic> routeGenerator(RouteSettings settings) {
                   ),
                 ],
                 child: CreditCardPage(paymentPrice: totalPrice),
+              ));
+    case AppRoutes.ordersPage:
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+                create: (context) => UserPrefCubit(
+                    repository: FirestoreRepo(LandingPage.user!.uid)),
+                child: const OrderPages(),
+              ));
+    case AppRoutes.ordersDetailsPage:
+      final args = settings.arguments as Map<String, dynamic>;
+      final Order order = args['order'];
+      final int orderNumber = args['orderNumber'];
+      return MaterialPageRoute(
+          builder: (_) => OrderDetails(
+                order: order,
+                orderNumber: orderNumber,
               ));
     case AppRoutes.landingPageRoute:
     default:

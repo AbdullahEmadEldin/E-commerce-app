@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/data_layer/Models/address_model.dart';
 import 'package:e_commerce_app/data_layer/Models/delivery_option.dart';
+import 'package:e_commerce_app/data_layer/Models/order.dart';
 import 'package:e_commerce_app/data_layer/Models/user.dart';
 import 'package:e_commerce_app/data_layer/Services/stripe_payment/payment_service.dart';
 import 'package:e_commerce_app/data_layer/repository/firestore_repo.dart';
@@ -50,7 +51,7 @@ class UserPrefCubit extends Cubit<UserPrefState> {
     });
   }
 
-//TODO: on hit saveAddress button there is a bad state of SaveAddressFailed how ever the address saved successfully
+//! on hit saveAddress button there is a bad state of SaveAddressFailed how ever the address saved successfully
   Future<void> saveUserAddress(ShippingAddress shippingAddress) async {
     try {
       await repository.saveAddress(shippingAddress);
@@ -70,16 +71,24 @@ class UserPrefCubit extends Cubit<UserPrefState> {
     }
   }
 
-  Future<void> getDeliveryOptions() async {
-    emit(DelvieryOptionsLoading());
-    repository.deliveryOptions().first.then((delvieryOptions) {
-      print('sucesssssssssssssssssssssss: delivery options');
-      emit(DelvieryOptionsSucess(deliveryOptions: delvieryOptions));
-    }, onError: (error) {
-      print(
-          'faaaaaaaiiiiiiiiiiiiiiiiiilure delivery options state: ${error.toString()}');
-      emit(DeliveryOptionsFailure(errorMsg: error.toString()));
-    });
+  Future<void> createOrder(Order order) async {
+    try {
+      repository.createOrder(order);
+    } catch (e) {
+      print('error on creating order::: ${e.toString()}');
+    }
+  }
+
+  Future<void> getOrders() async {
+    emit(OrdersLoading());
+    try {
+      repository.myOrders().listen((orders) {
+        emit(OrdersSucessful(orders: orders));
+      });
+    } catch (e) {
+      print('Errorr getting orders list:: ${e.toString}');
+      emit(OrdersFailure(errorMsg: e.toString()));
+    }
   }
 
   Future<void> makePayment(int amount, String currency) async {
