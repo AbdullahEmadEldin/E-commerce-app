@@ -5,7 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartProductTile extends StatefulWidget {
   final UserProduct product;
-  const CartProductTile({Key? key, required this.product}) : super(key: key);
+  final bool isInterActive;
+  const CartProductTile(
+      {Key? key, required this.product, this.isInterActive = true})
+      : super(key: key);
 
   @override
   State<CartProductTile> createState() => _CartProductTileState();
@@ -18,7 +21,7 @@ class _CartProductTileState extends State<CartProductTile> {
       height: 121,
       child: Card(
         elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,40 +59,44 @@ class _CartProductTileState extends State<CartProductTile> {
                         _textRichHelper(context, 'Size', widget.product.size),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              BlocProvider.of<CartCubit>(context)
-                                  .cartProductQuantity(
-                                      userProduct: widget.product,
-                                      quantity: widget.product.quantity - 1);
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                              minimumSize: Size.zero),
-                          child: const Icon(Icons.remove),
-                        ),
-                        Text(widget.product.quantity.toString()),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              BlocProvider.of<CartCubit>(context)
-                                  .cartProductQuantity(
-                                      userProduct: widget.product,
-                                      quantity: widget.product.quantity + 1);
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                              minimumSize: Size.zero),
-                          child: const Icon(Icons.add),
-                        )
-                      ],
-                    )
+                    widget.isInterActive
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    BlocProvider.of<CartCubit>(context)
+                                        .cartProductQuantity(
+                                            userProduct: widget.product,
+                                            quantity:
+                                                widget.product.quantity - 1);
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    minimumSize: Size.zero),
+                                child: const Icon(Icons.remove),
+                              ),
+                              Text(widget.product.quantity.toString()),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    BlocProvider.of<CartCubit>(context)
+                                        .cartProductQuantity(
+                                            userProduct: widget.product,
+                                            quantity:
+                                                widget.product.quantity + 1);
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    minimumSize: Size.zero),
+                                child: const Icon(Icons.add),
+                              )
+                            ],
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               ),
@@ -99,12 +106,14 @@ class _CartProductTileState extends State<CartProductTile> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        BlocProvider.of<CartCubit>(context)
-                            .deleteFromCart(widget.product);
-                      },
-                      icon: const Icon(Icons.delete)),
+                  widget.isInterActive
+                      ? IconButton(
+                          onPressed: () {
+                            BlocProvider.of<CartCubit>(context)
+                                .deleteFromCart(widget.product);
+                          },
+                          icon: const Icon(Icons.delete))
+                      : const SizedBox(),
                   Text(
                       '${widget.product.price - (widget.product.price * (widget.product.discount ?? 0)) / 100}\$'),
                 ],
