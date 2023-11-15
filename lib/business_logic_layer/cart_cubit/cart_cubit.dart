@@ -22,7 +22,7 @@ class CartCubit extends Cubit<CartState> {
       cartProducts = await cartRepository.myCart().first;
       if (cartProducts.isEmpty) {
         userProduct = UserProduct(
-          id: kIdFromDartGenerator(),
+          id: kIdDartAutoGenerator(),
           productId: product.productID,
           color: 'color',
           size: dropdownValue ?? 'size',
@@ -44,7 +44,7 @@ class CartCubit extends Cubit<CartState> {
             break;
           } else if (index == -1 && i == cartProducts.length - 1) {
             userProduct = UserProduct(
-              id: kIdFromDartGenerator(),
+              id: kIdDartAutoGenerator(),
               productId: product.productID,
               color: 'color',
               size: dropdownValue ?? 'size',

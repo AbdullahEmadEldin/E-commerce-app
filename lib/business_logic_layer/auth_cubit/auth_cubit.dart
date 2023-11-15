@@ -63,7 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
         final user =
             await authService.signUpWithEmailAndPassword(email, password);
         await repo.setUserData(UserData(
-          uId: user?.uid ?? kIdFromDartGenerator(),
+          uId: user?.uid ?? kIdDartAutoGenerator(),
           email: email,
           name: name,
         ));
@@ -104,7 +104,7 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
       await repo.setUserData(UserData(
-        uId: userCredential.user?.uid ?? kIdFromDartGenerator(),
+        uId: userCredential.user?.uid ?? kIdDartAutoGenerator(),
         email: userCredential.user?.email ?? 'email',
         name: userCredential.user?.displayName ?? 'name',
       ));

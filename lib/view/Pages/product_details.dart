@@ -110,9 +110,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         const SnackBar(
                           content: Text(
                             'Product addedd successfully',
-                            style: TextStyle(color: Colors.black),
                           ),
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.black,
                         ),
                       );
                     }

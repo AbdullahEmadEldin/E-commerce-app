@@ -123,7 +123,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
               TextFormField(
                 controller: _countryController,
                 decoration: const InputDecoration(
-                    labelText: 'Countrt',
+                    labelText: 'Country',
                     fillColor: Colors.white,
                     filled: true),
                 validator: (value) =>
@@ -161,7 +161,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       await saveAddressCubit.saveUserAddress(ShippingAddress(
                           id: shippingAddress != null
                               ? shippingAddress!.id
-                              : kIdFromDartGenerator(),
+                              : kIdDartAutoGenerator(),
                           name: _fullNameController.text.trim(),
                           address: _addressController.text.trim(),
                           city: _cityController.text.trim(),

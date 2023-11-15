@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _optionTile(context,
                     title: 'My orders',
                     subtitle: 'no orders yet',
-                    routeName: 'orders'),
+                    routeName: AppRoutes.ordersPage),
                 _optionTile(
                   context,
                   title: 'Shipping addresses',
