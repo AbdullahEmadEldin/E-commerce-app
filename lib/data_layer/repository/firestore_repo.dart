@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/data_layer/Models/order.dart';
 import 'package:e_commerce_app/data_layer/Models/product.dart';
 import 'package:e_commerce_app/data_layer/Models/user_product.dart';
 import 'package:e_commerce_app/data_layer/Services/firestore_services.dart';
@@ -14,12 +15,14 @@ abstract class Repository {
   Stream<List<Product>> getWomenProducts();
   Stream<List<Product>> getMenProducts();
   Stream<List<UserProduct>> myCart();
+  Stream<List<Order>> myOrders();
   Stream<List<DeliveryOption>> deliveryOptions();
   Stream<List<ShippingAddress>> getShippingAddresses();
   Stream<List<ShippingAddress>> getDefaultShippingAddress();
   Future<UserData> getUserData();
   Future<void> setUserData(UserData userData);
   Future<void> addToCart(UserProduct userProduct);
+  Future<void> createOrder(Order order);
   Future<void> addProduct(Product product);
   Future<void> saveAddress(ShippingAddress usersAddress);
   Future<void> deleteCartProduct({required UserProduct userProduct});
@@ -70,6 +73,10 @@ class FirestoreRepo implements Repository {
       collectionPath: FirestoreApiPath.cartCollection(uId),
       deMapping: ((data, documentId) =>
           UserProduct.fromMap(data!, documentId)));
+  @override
+  Stream<List<Order>> myOrders() => _service.collectionsStream(
+      collectionPath: FirestoreApiPath.orderCollection(uId),
+      deMapping: ((data, documentId) => Order.fromMap(data!, documentId)));
 
   @override
   Stream<List<Product>> getWomenProducts() {
@@ -132,6 +139,10 @@ class FirestoreRepo implements Repository {
       documentPath: FirestoreApiPath.cartProduct(uId, userProduct.id),
       data: userProduct.toMap());
 
+  @override
+  Future<void> createOrder(Order order) => _service.setData(
+      documentPath: FirestoreApiPath.orderProduct(uId, order.id),
+      data: order.toMap());
   @override
   Future<void> addProduct(Product product) => _service.setData(
       documentPath:

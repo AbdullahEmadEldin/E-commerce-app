@@ -19,6 +19,7 @@ class FirestoreServices {
   }) async {
     final reference = _firestore.doc(documentPath);
     debugPrint('Request data: $data');
+    debugPrint('Request Paath: $documentPath');
     try {
       await reference.set(data);
     } catch (e) {
