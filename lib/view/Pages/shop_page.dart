@@ -29,17 +29,17 @@ class _ShopPageState extends State<ShopPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(height: 50, child: _paymentOptionList()),
+              SizedBox(height: size.height * 0.05, child: _categoryOption()),
               isActiveIndex == 0
                   ? SizedBox(
-                      height: size.height - 100,
+                      height: size.height,
                       child: _productsBlocBuilder(size,
                           emptyMsg: 'No women products', isWomenCategory: true),
                     )
                   : const SizedBox(),
               isActiveIndex == 1
                   ? SizedBox(
-                      height: size.height - 100,
+                      height: size.height,
                       child: _productsBlocBuilder(size,
                           emptyMsg: 'No men products', isWomenCategory: false))
                   : const SizedBox(),
@@ -67,7 +67,7 @@ class _ShopPageState extends State<ShopPage> {
           return GridView.builder(
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 0.7),
+                  crossAxisCount: 2, childAspectRatio: 0.66),
               itemCount: products.length,
               itemBuilder: (_, index) => Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -93,7 +93,7 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  ListView _paymentOptionList() {
+  ListView _categoryOption() {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,

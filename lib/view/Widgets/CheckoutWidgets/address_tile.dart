@@ -9,7 +9,7 @@ class AddressTile extends StatefulWidget {
   final ShippingAddress address;
   final bool inViewPage;
   final RadioListTile? isDefaultButton;
-  AddressTile(
+  const AddressTile(
       {Key? key,
       required this.address,
       this.inViewPage = false,
@@ -25,7 +25,10 @@ class _AddressTileState extends State<AddressTile> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Card(
+      elevation: 5,
+      margin: const EdgeInsets.all(16),
       key: Key(widget.address.id),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -46,7 +49,7 @@ class _AddressTileState extends State<AddressTile> {
                 _editAddress(context)
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: size.height * 0.001),
             Text(widget.address.address),
             Text(
                 '${widget.address.city}, ${widget.address.state} ${widget.address.postalCode}, ${widget.address.country}'),

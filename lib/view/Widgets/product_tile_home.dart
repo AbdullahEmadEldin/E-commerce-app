@@ -27,11 +27,12 @@ class ProductTileHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (context) => ProductCubit(
           productsRepositroy: FirestoreRepo(LandingPage.user!.uid)),
       child: InkWell(
-        //TODO: what does rootNavigator = true do ??
+        //!! what does rootNavigator = true do ??
         //it make the new page seperated from the context of the bottomNavigationBar
         onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
           AppRoutes.productDetails,
@@ -44,7 +45,7 @@ class ProductTileHome extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  _imgBuilder(),
+                  _imgBuilder(size),
                   ProductBadge(
                     product: product,
                     isNew: isNew,
@@ -65,7 +66,7 @@ class ProductTileHome extends StatelessWidget {
                     Row(
                       children: [
                         ProductRatingBar(product: product),
-                        const SizedBox(width: 4),
+                        SizedBox(width: size.width * 0.003),
                         const Text('(96)', style: TextStyle(color: Colors.grey))
                       ],
                     ),
@@ -74,14 +75,14 @@ class ProductTileHome extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: const Color.fromARGB(255, 117, 117, 117)),
                     ),
-                    const SizedBox(height: 4.0),
+                    SizedBox(width: size.width * 0.003),
                     Text(
                       product.title,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                     ),
-                    const SizedBox(height: 4.0),
+                    SizedBox(width: size.width * 0.003),
                     Text.rich(TextSpan(children: [
                       TextSpan(
                         text: '${product.price}\$',
@@ -109,14 +110,14 @@ class ProductTileHome extends StatelessWidget {
     );
   }
 
-  ClipRRect _imgBuilder() {
+  ClipRRect _imgBuilder(Size size) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Image.network(
         product.imgUrl,
         fit: BoxFit.cover,
         height: postions.imageHeight,
-        width: 220,
+        width: size.width * 0.5,
       ),
     );
   }

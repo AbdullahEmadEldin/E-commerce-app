@@ -17,8 +17,9 @@ class CartProductTile extends StatefulWidget {
 class _CartProductTileState extends State<CartProductTile> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return SizedBox(
-      height: 121,
+      height: size.height * 0.15,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -33,13 +34,13 @@ class _CartProductTileState extends State<CartProductTile> {
               child: Image.network(
                 widget.product.imgUrl,
                 fit: BoxFit.cover,
-                width: 120,
+                width: size.width * 0.3,
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: size.width * 0.01),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,13 +52,16 @@ class _CartProductTileState extends State<CartProductTile> {
                           .titleMedium!
                           .copyWith(color: Colors.black),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: size.height * 0.01),
                     Row(
                       children: [
                         _textRichHelper(context, 'Color', widget.product.color),
-                        const SizedBox(width: 16),
+                        SizedBox(width: size.width * 0.01),
                         _textRichHelper(context, 'Size', widget.product.size),
                       ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.015,
                     ),
                     widget.isInterActive
                         ? Row(

@@ -16,67 +16,67 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     BlocProvider.of<UserPrefCubit>(context).getUserData();
     return SafeArea(
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'My profile',
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                _profileInfoDrawer(context),
-                const SizedBox(height: 24),
-                _optionTile(context,
-                    title: 'My orders',
-                    subtitle: 'no orders yet',
-                    routeName: AppRoutes.ordersPage),
-                _optionTile(
-                  context,
-                  title: 'Shipping addresses',
-                  subtitle: '3 address',
-                  routeName: AppRoutes.viewAddressesPage,
-                ),
-                _optionTile(context,
-                    title: 'Payment methods',
-                    subtitle: 'visa **34',
-                    routeName: 'routeName'),
-                _optionTile(context,
-                    title: 'My reviews',
-                    subtitle: 'subtitle',
-                    routeName: 'routeName'),
-                _optionTile(context,
-                    title: 'Settings',
-                    subtitle: 'Passwords, Notifications',
-                    routeName: AppRoutes.settingsPage),
-                const SizedBox(height: 56),
-                BlocListener<AuthCubit, AuthState>(
-                  listener: (context, state) {
-                    if (state is LogOut) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: MainButton(
-                        text: 'Log Out',
-                        ontap: () {
-                          BlocProvider.of<AuthCubit>(context).logOut();
-                          BlocProvider.of<AuthCubit>(context).googleSignOut();
-                        },
-                      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'My profile',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium!
+                    .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: size.height * 0.02),
+              _profileInfoDrawer(context, size),
+              SizedBox(height: size.height * 0.03),
+              _optionTile(context,
+                  title: 'My orders',
+                  subtitle: 'no orders yet',
+                  routeName: AppRoutes.ordersPage),
+              _optionTile(
+                context,
+                title: 'Shipping addresses',
+                subtitle: '3 address',
+                routeName: AppRoutes.viewAddressesPage,
+              ),
+              _optionTile(context,
+                  title: 'Payment methods',
+                  subtitle: 'visa **34',
+                  routeName: 'routeName'),
+              _optionTile(context,
+                  title: 'My reviews',
+                  subtitle: 'subtitle',
+                  routeName: 'routeName'),
+              _optionTile(context,
+                  title: 'Settings',
+                  subtitle: 'Passwords, Notifications',
+                  routeName: AppRoutes.settingsPage),
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is LogOut) {
+                    Navigator.pop(context);
+                  }
+                },
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: MainButton(
+                      text: 'Log Out',
+                      ontap: () {
+                        BlocProvider.of<AuthCubit>(context).logOut();
+                        BlocProvider.of<AuthCubit>(context).googleSignOut();
+                      },
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -129,20 +129,22 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Row _profileInfoDrawer(BuildContext context) {
+  Row _profileInfoDrawer(BuildContext context, Size size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CircleAvatar(
-          child: Image.asset(AppAssets.profilePic),
+          child: Image.asset(
+            AppAssets.profilePic,
+            fit: BoxFit.fill,
+          ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: size.width * 0.02),
         BlocBuilder<UserPrefCubit, UserPrefState>(
           builder: (context, state) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //TODO: fetching personal info from firebase (User model)
                 Text(
                   state is UserDataSucessfull
                       ? state.user.name
@@ -164,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             );
           },
-        )
+        ),
       ],
     );
   }

@@ -68,15 +68,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ))
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: size.height * 0.002),
               BlocBuilder<UserPrefCubit, UserPrefState>(
-                //bloc: defaultAddressCubit,
                 builder: (context, state) {
                   if (state is DefaultShippingAddressLoading) {
                     return const CircularProgressIndicator.adaptive();
                   } else if (state is DefaultShippingAddressSucess) {
                     if (state.shippingAddress!.isEmpty) {
-                      return _emptyDefaultAddress();
+                      return _emptyDefaultAddress(size);
                     }
                     defaultAddress = state.shippingAddress!.first;
 
@@ -95,46 +94,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   }
                 },
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: size.height * 0.01),
               const Divider(thickness: 1),
-              const SizedBox(height: 12),
-              BlocBuilder<CartCubit, CartState>(
-                builder: (context, state) {
-                  if (state is SuccessCartProducts) {
-                    orderProducts = state.cartProducts;
+              SizedBox(height: size.height * 0.015),
+              SizedBox(
+                height: size.height * 0.3,
+                child: BlocBuilder<CartCubit, CartState>(
+                  builder: (context, state) {
+                    if (state is SuccessCartProducts) {
+                      orderProducts = state.cartProducts;
 
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: orderProducts.length,
-                        itemBuilder: (_, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(orderProducts[index].title),
-                              Text(
-                                'Size: ${orderProducts[index].size}, Color: ${orderProducts[index].color}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(color: Colors.grey),
-                              )
-                            ],
-                          );
-                        });
-                  }
-                  return Container();
-                },
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: orderProducts.length,
+                          itemBuilder: (_, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(orderProducts[index].title),
+                                Text(
+                                  'Size: ${orderProducts[index].size}, Color: ${orderProducts[index].color}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey),
+                                )
+                              ],
+                            );
+                          });
+                    }
+                    return Container();
+                  },
+                ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: size.height * 0.015),
               const Divider(thickness: 1),
               TitleAndValueRow(
                   title: 'Order: ', value: '${widget.totalPrice}\$'),
-              const SizedBox(height: 8),
+              SizedBox(height: size.height * 0.01),
               const TitleAndValueRow(title: 'Delivery: ', value: '15\$'),
-              const SizedBox(height: 8),
+              SizedBox(height: size.height * 0.01),
               TitleAndValueRow(
                   title: 'Total: ', value: '${widget.totalPrice + 15}\$'),
-              SizedBox(height: size.height * 0.25),
+              SizedBox(height: size.height * 0.1),
               MainButton(
                 text: 'Confirm & Pay',
                 ontap: () {
@@ -172,14 +174,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  SizedBox _emptyDefaultAddress() {
-    return const SizedBox(
+  SizedBox _emptyDefaultAddress(Size size) {
+    return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
-          Text('choose your default address or create one'),
-          SizedBox(height: 4),
-          AddAddressButton(),
+          const Text('choose your default address or create one'),
+          SizedBox(height: size.height * 0.001),
+          const AddAddressButton(),
         ],
       ),
     );

@@ -7,7 +7,7 @@ import 'package:e_commerce_app/data_layer/Models/product.dart';
 import 'package:e_commerce_app/view/Widgets/product_tile_home.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,8 @@ class HomePage extends StatelessWidget {
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 16.0),
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.02, vertical: 16.0),
                 child: Text(
                   'Fancy Clothes',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
@@ -47,22 +47,23 @@ class HomePage extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.02, vertical: size.height * 0.02),
           child: Column(
             children: [
               _buildHeaderOfList(context,
                   title: 'Sale', description: 'Super Summer Sale!'),
-              const SizedBox(height: 8),
+              SizedBox(height: size.height * 0.01),
               SizedBox(
-                height: 300,
+                height: size.height * 0.365,
                 child: _productsBlocBuilder(size,
                     emptyMsg: 'No sale products', isSaleProducts: true),
               ),
               _buildHeaderOfList(context,
                   title: 'New', description: 'Super New Products!'),
-              const SizedBox(height: 8),
+              SizedBox(height: size.height * 0.01),
               SizedBox(
-                  height: 300,
+                  height: size.height * 0.365,
                   child: _productsBlocBuilder(size,
                       emptyMsg: 'NO new products', isSaleProducts: false))
             ],

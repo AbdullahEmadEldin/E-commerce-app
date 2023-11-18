@@ -8,6 +8,7 @@ class OrderPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     BlocProvider.of<UserPrefCubit>(context).getOrders();
     return SafeArea(
       child: Scaffold(
@@ -22,7 +23,7 @@ class OrderPages extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: size.height * 0.02),
                 BlocBuilder<UserPrefCubit, UserPrefState>(
                   builder: (context, state) {
                     if (state is OrdersLoading) {
@@ -35,7 +36,7 @@ class OrderPages extends StatelessWidget {
                             child: Text('You haven\'nt make any orders yet'));
                       } else {
                         return SizedBox(
-                          height: 600,
+                          height: size.height * 0.85,
                           child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: orders.length,

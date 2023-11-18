@@ -1,7 +1,6 @@
 import 'package:e_commerce_app/business_logic_layer/cart_cubit/cart_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/product.dart';
 
-import 'package:e_commerce_app/view/Widgets/favourite_button.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,32 +41,25 @@ class _ProductDetailsState extends State<ProductDetails> {
             width: double.infinity,
             fit: BoxFit.cover,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: size.height * 0.02),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: DropdownMenuComponent(
-                      items: ['S', 'M', 'L', 'XL', 'XXL'],
-                      hint: 'Size',
-                      onchange: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue;
-                        });
-                      },
-                    )),
-                    const Spacer(),
-                    // FavouriteButton(
-                    //   isFavourite: widget.product.isFavourite,
-                    // ),
-                  ],
+                SizedBox(
+                  width: size.width * 0.35,
+                  child: DropdownMenuComponent(
+                    items: const ['S', 'M', 'L', 'XL', 'XXL'],
+                    hint: 'Size',
+                    onchange: (String? newValue) {
+                      setState(() {
+                        dropdownValue = newValue;
+                      });
+                    },
+                  ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: size.height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -95,14 +87,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                       .labelLarge!
                       .copyWith(color: Colors.black45),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: size.height * 0.02),
                 Text(
                     'This a mock up description for this piece of clothes will customaized later, we are trying to make this text bigger in size to try responsiveness of the button position',
                     style: Theme.of(context)
                         .textTheme
                         .labelLarge!
                         .copyWith(color: Colors.black54)),
-                const SizedBox(height: 16),
+                SizedBox(height: size.height * 0.05),
                 BlocListener<CartCubit, CartState>(
                   listener: (context, state) {
                     if (state is SucessAddToCart) {

@@ -11,6 +11,7 @@ class OrderDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -28,8 +29,8 @@ class OrderDetails extends StatelessWidget {
                   children: [
                     Text(
                       'Order No: $orderNumber',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text(
                       order.date,
@@ -37,24 +38,23 @@ class OrderDetails extends StatelessWidget {
                     )
                   ],
                 ),
+                SizedBox(height: size.height * 0.01),
+                textRichBuilder(context,
+                    text1: 'Tracking number: ', text2: order.id),
                 const SizedBox(height: 8),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    textRichBuilder(context,
-                        text1: 'Tracking number: ', text2: order.id),
-                    const Text('Processing',
-                        style: TextStyle(color: Colors.green))
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Items: ${order.products.length}',
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 8),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Items: ${order.products.length}',
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      const Text('Processing',
+                          style: TextStyle(color: Colors.green))
+                    ]),
+                SizedBox(height: size.height * 0.01),
                 SizedBox(
-                  height: 400,
+                  height: size.height * 0.6,
                   child: ListView.builder(
                       itemCount: order.products.length,
                       itemBuilder: (context, index) => Padding(
@@ -65,7 +65,10 @@ class OrderDetails extends StatelessWidget {
                             ),
                           )),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: size.height * 0.01),
+                const Divider(
+                  thickness: 1,
+                ),
                 const Text(
                   'Order information',
                   style: TextStyle(fontWeight: FontWeight.bold),

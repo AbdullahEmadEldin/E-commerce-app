@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/Utilities/routes.dart';
 import 'package:e_commerce_app/business_logic_layer/user_preferences_cubit/user_perferences_cubit.dart';
 import 'package:e_commerce_app/data_layer/Models/address_model.dart';
 import 'package:e_commerce_app/Utilities/constants.dart';
@@ -6,7 +5,6 @@ import 'package:e_commerce_app/view/Widgets/dialog.dart';
 import 'package:e_commerce_app/view/Widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class AddAddressPage extends StatefulWidget {
   final ShippingAddress? shippingAddress;
@@ -55,6 +53,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final saveAddressCubit = BlocProvider.of<UserPrefCubit>(context);
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +80,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your name' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: size.height * 0.02),
               TextFormField(
                 controller: _addressController,
                 decoration: const InputDecoration(
@@ -91,7 +90,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your address' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: size.height * 0.02),
               TextFormField(
                 controller: _cityController,
                 decoration: const InputDecoration(
@@ -99,7 +98,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your city' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: size.height * 0.02),
               TextFormField(
                 controller: _stateController,
                 decoration: const InputDecoration(
@@ -109,7 +108,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your state' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: size.height * 0.02),
               TextFormField(
                 controller: _zipcodeController,
                 decoration: const InputDecoration(
@@ -119,7 +118,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your zip code' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: size.height * 0.02),
               TextFormField(
                 controller: _countryController,
                 decoration: const InputDecoration(
@@ -129,7 +128,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your country' : null,
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: size.height * 0.25),
               BlocListener<UserPrefCubit, UserPrefState>(
                 listener: (context, state) {
                   if (state is SaveAddressSucess) {
@@ -137,8 +136,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                   } else if (state is SaveAddressFailed) {
                     saveAddressFailed = true;
                   }
-                  print('boool11: $saveAddressDone');
-                  print('boool22: $saveAddressFailed');
+
                   saveAddressDone
                       ? MainDialog(
                           context: context,
