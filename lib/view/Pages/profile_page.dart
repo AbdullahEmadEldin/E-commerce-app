@@ -57,6 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: 'Settings',
                   subtitle: 'Passwords, Notifications',
                   routeName: AppRoutes.settingsPage),
+              SizedBox(height: size.height * 0.24),
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
                   if (state is LogOut) {
