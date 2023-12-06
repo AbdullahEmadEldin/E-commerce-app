@@ -100,6 +100,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     if (state is SucessAddToCart) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
+                          duration: Duration(microseconds: 10),
                           content: Text(
                             'Product addedd successfully',
                           ),

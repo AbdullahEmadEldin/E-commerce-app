@@ -43,6 +43,7 @@ class _AuthPageState extends State<AuthPage> {
           isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              duration: Duration(microseconds: 10),
               content: Text('Successful authentication'),
             ),
           );
