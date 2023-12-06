@@ -14,6 +14,3 @@ Programming & architecture features:
       - Payment gateway:
             - Stripe payment gateway
             - PayPal gateway
-## Demonstration Video
-[![Demo Video](video/ecommerce app demo.mp4)](https://raw.githubusercontent.com/AbdullahEmadEldin/E-commerce-app/Refactor-to-BLoc-Cubit
-/video/ecommerce app demo.mp4)
